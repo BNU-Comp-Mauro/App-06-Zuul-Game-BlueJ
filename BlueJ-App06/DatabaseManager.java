@@ -60,8 +60,10 @@ public class DatabaseManager
     {
         dir = new DirectoryMaker();
     }
-  public static void connectDB(String folder, String database, boolean autoCommit)
-  {
+  
+    public static void connectDB(String folder, String database, boolean autoCommit)
+ 
+    {
       try {
           Class.forName("org.sqlite.JDBC");
           c = DriverManager.getConnection("jdbc:sqlite:" + folder + "/" + database + ".zuul");
@@ -105,8 +107,6 @@ public class DatabaseManager
             }
             System.out.println("Table created successfully");
   }  
-  
-  
   
   public static void insertDB(String folder, String filename, String table, String columns, String data)
   {

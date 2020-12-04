@@ -1,4 +1,5 @@
 #BlueJ package file
+<<<<<<< Updated upstream
 dependency1.from=RoomGenerator
 dependency1.to=Game
 dependency1.type=UsesDependency
@@ -72,6 +73,51 @@ package.frame.height=977
 package.frame.width=1245
 package.numDependencies=19
 package.numTargets=13
+=======
+dependency1.from=Game
+dependency1.to=Parser
+dependency1.type=UsesDependency
+dependency2.from=Game
+dependency2.to=Room
+dependency2.type=UsesDependency
+dependency3.from=Game
+dependency3.to=Command
+dependency3.type=UsesDependency
+dependency4.from=Game
+dependency4.to=CommandWord
+dependency4.type=UsesDependency
+dependency5.from=Program
+dependency5.to=Game
+dependency5.type=UsesDependency
+dependency6.from=Command
+dependency6.to=CommandWord
+dependency6.type=UsesDependency
+dependency7.from=CommandWords
+dependency7.to=CommandWord
+dependency7.type=UsesDependency
+dependency8.from=Parser
+dependency8.to=CommandWords
+dependency8.type=UsesDependency
+dependency9.from=Parser
+dependency9.to=Command
+dependency9.type=UsesDependency
+editor.fx.0.height=0
+editor.fx.0.width=0
+editor.fx.0.x=0
+editor.fx.0.y=0
+objectbench.height=168
+objectbench.width=745
+package.divider.horizontal=0.6
+package.divider.vertical=0.674219910846954
+package.editor.height=356
+package.editor.width=658
+package.editor.x=456
+package.editor.y=95
+package.frame.height=637
+package.frame.width=784
+package.numDependencies=9
+package.numTargets=7
+>>>>>>> Stashed changes
 package.showExtends=true
 package.showUses=true
 project.charset=UTF-8

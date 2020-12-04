@@ -8,6 +8,11 @@
 public class Menu
 {
     private static Game game;
+    private String folder;
+    private String filename;
+    private String table;
+    private String columns;
+    private String data;
     
     private static DatabaseManager db;
     // Allows reader to be called directly against the class Menu
@@ -42,7 +47,7 @@ public class Menu
     {
         String name = reader.getString("Character Name:");
         db.initialiseSaveData(name);
-        db.insertDB();
+        db.insertDB(folder, filename, table, columns, data );
     }
     
     /**
