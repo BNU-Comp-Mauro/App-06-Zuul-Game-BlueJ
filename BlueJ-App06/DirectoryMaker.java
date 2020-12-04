@@ -7,12 +7,12 @@ import java.io.File;
  */
 public class DirectoryMaker
 {
-  public DirectoryMaker()
+    public DirectoryMaker()
     {
         createDirArray();
     } 
-    
-  public void createDirArray()
+
+    public void createDirArray()
     {
         String[] files = {"ProgramFiles", "SaveData"};
         for (String i : files)
@@ -26,15 +26,15 @@ public class DirectoryMaker
             }
         }
     } 
-    
-  public void createDir(String folder)
+
+    public void createDir(String folder)
     {
-       File f = new File(folder); 
-        if (f.mkdir()) { 
+        File f = new File(folder); 
+        if (f.mkdir()) {
             System.out.println("Directory is created"); 
         } 
         else { 
-        System.out.println("Directory cannot be created"); 
-       }
+            System.out.println("Directory cannot be created"); 
+        }
     } 
 }

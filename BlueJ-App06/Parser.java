@@ -1,5 +1,4 @@
 import java.util.Scanner;
-
 /**
  * This class is part of the "World of Zuul" application. 
  * "World of Zuul" is a very simple, text based adventure game.  
@@ -45,11 +44,11 @@ public class Parser
 
         // Find up to two words on the line.
         Scanner tokenizer = new Scanner(inputLine);
-        
+
         if(tokenizer.hasNext()) 
         {
             word1 = tokenizer.next();      // get first word
-        
+
             if(tokenizer.hasNext()) 
             {
                 word2 = tokenizer.next();      // get second word

@@ -14,6 +14,12 @@ public class RoomGenerator
      */
     public RoomGenerator()
     {
+        game = new Game();
+        databaseManager = new DatabaseManager();
+    }
+    
+    private void Rooms()
+    {
         
     }
 }

@@ -32,7 +32,7 @@ public class InputReader
         String inputLine = reader.nextLine();
         return inputLine;
     }
-    
+
     /**
      * Prompt the user to enter a string and Read a line of text
      * from standard input (the text terminal), and return a String.
@@ -58,7 +58,7 @@ public class InputReader
 
         return value;
     }
-    
+
     /**
      * Prompt the user to enter an int
      * Read an int from standard input 

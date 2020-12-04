@@ -23,7 +23,7 @@ public class CommandWords
     public CommandWords()
     {
         validCommands = new HashMap<>();
-        
+
         for(CommandWord command : CommandWord.values()) 
         {
             if(command != CommandWord.UNKNOWN) 
@@ -42,7 +42,7 @@ public class CommandWords
     public CommandWord getCommandWord(String commandWord)
     {
         CommandWord command = validCommands.get(commandWord);
-        
+
         if(command != null) 
         {
             return command;
@@ -52,7 +52,7 @@ public class CommandWords
             return CommandWord.UNKNOWN;
         }
     }
-    
+
     /**
      * Check whether a given String is a valid command word. 
      * @return true if it is, false if it isn't.
@@ -71,7 +71,7 @@ public class CommandWords
         {
             System.out.print(command + "  ");
         }
-        
+
         System.out.println();
     }
 }

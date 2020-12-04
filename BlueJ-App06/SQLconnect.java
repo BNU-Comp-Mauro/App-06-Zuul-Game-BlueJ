@@ -11,18 +11,18 @@ public class SQLconnect
     public static Connection c = null;
     public static Statement stmt = null;
     public static DirectoryMaker dir;
-  public static void connectDB(String folder, String database, boolean autoCommit)
-  {
-      dir.createDir(folder);
-      try {
-          Class.forName("org.sqlite.JDBC");
-          c = DriverManager.getConnection("jdbc:sqlite:" + folder + "/" + database + ".zuul");
-          stmt = c.createStatement();
-          c.setAutoCommit(autoCommit);
+    public static void connectDB(String folder, String database, boolean autoCommit)
+    {
+        dir.createDir(folder);
+        try {
+            Class.forName("org.sqlite.JDBC");
+            c = DriverManager.getConnection("jdbc:sqlite:" + folder + "/" + database + ".zuul");
+            stmt = c.createStatement();
+            c.setAutoCommit(autoCommit);
         } catch ( Exception e ) {
-          System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-          System.exit(0);
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            System.exit(0);
         }
         System.out.println("Opened database successfully");
-  }
+    }
 }

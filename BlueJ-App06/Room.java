@@ -1,7 +1,6 @@
 import java.util.Set;
 import java.util.HashMap;
 import java.util.Iterator;
-
 /**
  * Class Room - a room in an adventure game.
  *
@@ -72,7 +71,7 @@ public class Room
     {
         String returnString = "Exits:";
         Set<String> keys = exits.keySet();
-        
+
         for(String exit : keys) 
         {
             returnString += " " + exit;
