@@ -125,13 +125,13 @@ public class DatabaseManager
         System.out.println("Records created successfully");
     }
 
-    public static void selectDB(String folder, String filename)
+    public static void findDB(String folder, String filename, String table, String column, String dataType)
     {
         try {
             connectDB(folder, filename, false);
-
+            int type = dataTypeParser(dataType);
             stmt = c.createStatement();
-            ResultSet rs = stmt.executeQuery( "SELECT * FROM web_blog;" );
+            ResultSet rs = stmt.executeQuery( "SELECT " + column + " FROM " + table + ";" );
             while ( rs.next() ) {
                 int id = rs.getInt("id");
                 String  name = rs.getString("name");
@@ -152,7 +152,71 @@ public class DatabaseManager
         }
         System.out.println("Operation done successfully");  
     }
-
+    
+    public static void getmaxID(String folder, String filename, String table, String column, String dataType)
+    {
+        try {
+            connectDB(folder, filename, false);
+            int type = dataTypeParser(dataType);
+            stmt = c.createStatement();
+            ResultSet rs = stmt.executeQuery( "SELECT " + column + " FROM " + table + ";" );
+            while ( rs.next() ) {
+                int id = rs.getInt("id");
+                String  name = rs.getString("name");
+                String  message = rs.getString("message");
+                String date_added = rs.getString("date_added");
+                System.out.println( "ID : " + id );
+                System.out.println( "Name : " + name );
+                System.out.println( "Message : " + message );
+                System.out.println( "Date Added : " + date_added );
+                System.out.println();
+            }
+            rs.close();
+            stmt.close();
+            c.close();
+        } catch ( Exception e ) {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            System.exit(0);
+        }
+        System.out.println("Operation done successfully");  
+    }
+    
+    public static void getColumns(String folder, String filename, String table)
+    {
+        try {
+            connectDB(folder, filename, false);
+            stmt = c.createStatement();
+            ResultSet rs = stmt.executeQuery( "PRAGMA table_info(" + table + ");" );
+            rs.close();
+            stmt.close();
+            c.close();
+        } catch ( Exception e ) {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            System.exit(0);
+        }
+    }
+    
+    private static int dataTypeParser(String type)
+    {
+        type.toLowerCase();
+        if(type.equals("string"))
+        {
+            return 1;
+        }
+        else if(type.matches("int|integer"))
+        {
+            return 2;
+        }
+        else if(type.matches("boolean"))
+        {
+            return 3;
+        }
+        else
+        {
+            return 4;
+        }
+    }
+    
     public static void updateDB()
     {
         Connection c = null;
