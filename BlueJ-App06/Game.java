@@ -21,6 +21,7 @@ import java.sql.*;
 public class Game 
 {
     private Parser parser;
+    private Player player;
     private Map map;
     private Room currentRoom;
     private static DatabaseManager databaseManager;
