@@ -7,16 +7,24 @@
  */
 public class Menu
 {
-    private static Game game;
+    private Game game;
+    
     private String folder;
+    
     private String filename;
+    
     private String table;
+    
     private String columns;
+    
     private String data;
-
-    private static DatabaseManager db;
+    
+    public String name;
+    
+    private RoomGenerator roomGen;
+    private DatabaseManager db;
     // Allows reader to be called directly against the class Menu
-    private static InputReader reader;
+    private InputReader reader;
 
     //Sets the array for menu choice
     private String [] menuChoices;
@@ -45,9 +53,9 @@ public class Menu
 
     public void newGame()
     {
-        String name = reader.getString("Character Name:");
+        name = reader.getString("Character Name:");
         db.initialiseSaveData(name);
-        db.insertDB(folder, filename, table, columns, data );
+        roomGen = new RoomGenerator(name, 12);
     }
 
     /**
@@ -57,4 +65,6 @@ public class Menu
     {
         menuSetup();
     }
+    
+    
 }

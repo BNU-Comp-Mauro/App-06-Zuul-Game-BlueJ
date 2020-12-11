@@ -8,31 +8,36 @@ import java.sql.*;
 /**
  * Write a description of class s here.
  *
- * @author (your name)
- * @version (a version number or a date)
+ * @author Haroon Sadiq
+ * @version 0.1
  */
 public class DatabaseManager
 {
-    public static DirectoryMaker dir;
-    public static SQLconnect con;
+    private Menu menu;
+    public DirectoryMaker dir;
+    public SQLconnect con;
     public static Connection c = null;
     public static Statement stmt = null;
     public final static String sqlSaveData1 = "CREATE TABLE IF NOT EXISTS room" +
         "(ID INTEGER PRIMARY KEY NOT NULL," +
         " roomName STRING NOT NULL," + 
-        " level INTEGER NOT NULL," + 
+        " roomType STRING NOT NULL," +
         " items INTEGER NOT NULL," + 
-        " position INTEGER NOT NULL)";
+        " visitCounter INTEGER NOT NULL," + 
+        " north BOOLEAN NOT NULL," +
+        " east BOOLEAN NOT NULL," +
+        " south BOOLEAN NOT NULL," +
+        " west BOOLEAN NOT NULL," +
+        " rank INTEGER NOT NULL," +
+        " x INTEGER NOT NULL," +
+        " y INTEGER NOT NULL)";
+        
 
     public final static String sqlSaveData2 = "CREATE TABLE IF NOT EXISTS roomLog" +
         "(ID INTEGER PRIMARY KEY NOT NULL," +
         " roomID INTEGER NOT NULL," + 
         " time INTEGER NOT NULL," + 
         " visitCounter INTEGER NOT NULL," + 
-        " north BOOLEAN NOT NULL," +
-        " east BOOLEAN NOT NULL," +
-        " south BOOLEAN NOT NULL," +
-        " west BOOLEAN NOT NULL," +
         " cameFrom String NOT NULL," +
         " roomAge INTEGER NOT NULL)";
 
@@ -50,7 +55,11 @@ public class DatabaseManager
 
     public final static String[] sqlSaveData = {sqlSaveData1, sqlSaveData2, sqlSaveData3, sqlSaveData4};
 
-    public final static String sqlProgramFiles1 = "CREATE TABLE IF NOT EXISTS userInterface" +
+    public final static String sqlProgramFiles1 = "CREATE TABLE IF NOT EXISTS roomdata" +
+        "(ID STRING NOT NULL," +
+        " type STRING NOT NULL)";
+        
+    public final static String sqlProgramFiles2 = "CREATE TABLE IF NOT EXISTS itemdata" +
         "(type STRING NOT NULL," +
         " content STRING NOT NULL)";
 
@@ -76,7 +85,7 @@ public class DatabaseManager
         System.out.println("Opened database successfully");
     }
 
-    public static void initialiseSaveData(String filename)
+    public void initialiseSaveData(String filename)
     {
         for(String i : sqlSaveData)
         {
@@ -93,10 +102,10 @@ public class DatabaseManager
         }
     }    
 
-    public static void initialiseProgramData(String filename)
+    public static void initialiseProgramData()
     {
         try {
-            connectDB("ProgramFiles", filename, true);
+            connectDB("ProgramFiles", "data", true);
             stmt.executeUpdate(sqlProgramFiles1);
             stmt.close();
             c.close();
