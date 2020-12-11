@@ -153,67 +153,6 @@ public class RoomGenerator
         }
     }
     
-    private void roomAllocator(int rank)
-    {
-        
-    }
-        
-    
-    private void xyGenerator(int i)
-    {
-        if(i == 1)
-        {
-            y += +1;
-            System.out.println("(" + x + "," + y + ")");
-        }
-        else if(i == 2)
-        {
-            x += +1;
-            System.out.println("(" + x + "," + y + ")");
-        }
-        else if(i >= 3 && i <= 4)
-        {
-            y += -1;
-            System.out.println("(" + x + "," + y + ")");
-        }
-        else if(i >= 5 && i <= 6)
-        {
-            x += -1;
-            System.out.println("(" + x + "," + y + ")");
-        }
-        else if(i >= 7 && i <= 9)
-        {
-            y += +1;
-            System.out.println("(" + x + "," + y + ")");
-        }
-        else if(i >= 10 && i <= 12)
-        {
-            x += +1;
-            System.out.println("(" + x + "," + y + ")");
-        }
-        else if(i >= 13 && i <= 16)
-        {
-            y += -1;
-            System.out.println("(" + x + "," + y + ")");
-        }
-        else if(i >= 17 && i <= 20)
-        {
-            x += -1;
-            System.out.println("(" + x + "," + y + ")");
-        }
-        else if(i >= 21 && i <= 24)
-        {
-            y += +1;
-            System.out.println("(" + x + "," + y + ")");
-        }
-        else
-        {
-            System.out.println("Done");
-        }
-    }
-    
-    
-    
     public void test2(int xLocation, int yLocation, int range)
     {
         int length = 1;
