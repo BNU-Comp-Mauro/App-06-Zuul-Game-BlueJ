@@ -8,7 +8,7 @@
  */
 public class Program
 {
-    private static Menu menu;
+    private static Game game;
 
     /**
      * This class creates and runs an instance of
@@ -16,7 +16,7 @@ public class Program
      */
     public static void main()
     {
-        menu = new Menu();
-        menu.run();
+        game = new Game();
+        game.play();
     }
 }
