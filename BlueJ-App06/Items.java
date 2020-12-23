@@ -1,4 +1,3 @@
-
 /**
  * Enumeration class Items - write a description of the enum class here
  *
@@ -7,5 +6,18 @@
  */
 public enum Items
 {
-    KEY, POTION, SWORD, SHIELD, TRAPS
+    KEY("key"), POTION("potion"), SWORD("sword"), SHIELD("shield"),
+    TRAP("trap");
+    
+    private String itemString;
+    
+    Items(String itemString)
+    {
+        this.itemString = itemString;
+    }
+    
+    public String toString()
+    {
+        return itemString;
+    }
 }

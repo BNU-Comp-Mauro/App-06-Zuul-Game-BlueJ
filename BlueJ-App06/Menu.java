@@ -1,4 +1,3 @@
-
 /**
  * Write a description of class Menu here.
  *
@@ -65,6 +64,4 @@ public class Menu
     {
         menuSetup();
     }
-    
-    
 }

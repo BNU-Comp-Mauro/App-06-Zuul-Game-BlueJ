@@ -53,7 +53,10 @@ public class InputReader
             {
                 System.out.println("|✘| Blank Input");
             }
-            else isValid = true;
+            else
+            {
+                isValid = true;
+            }
         }
 
         return value;
