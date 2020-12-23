@@ -1,4 +1,7 @@
-
+import java.io.IOException;
+import java.nio.file.*;
+import java.util.*;
+import java.util.stream.Stream;
 /**
  * Write a description of class Menu here.
  *
@@ -28,6 +31,9 @@ public class Menu
 
     //Sets the array for menu choice
     private String [] menuChoices;
+    
+    private String [] gameChoices;
+    ArrayList<String> filenameArray = new ArrayList<String>();
 
     /**
      * Scans user input and outputs programmed choices 
@@ -49,22 +55,27 @@ public class Menu
             "Load Game",
             "Quit"  
         };
+        gameChoices = new String []
+        {
+            "Easy",
+            "Medium",
+            "Hard"  
+        };
     }
 
     public void newGame()
     {
         name = reader.getString("Character Name:");
         db.initialiseSaveData(name);
-        roomGen = new RoomGenerator(name, 12);
+        //roomGen = new RoomGenerator(name, 10);
+    }
+    
+    public void loadGame()
+    {
+        name = reader.getString("Character Name:");
+        
     }
 
-    /**
-     * A function which initialises the menu and starts the game
-     */
-    public void run()
-    {
-        menuSetup();
-    }
     
     
 }
