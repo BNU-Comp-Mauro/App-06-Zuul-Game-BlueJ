@@ -67,7 +67,7 @@ public class Menu
     {
         name = reader.getString("Character Name:");
         db.initialiseSaveData(name);
-        //roomGen = new RoomGenerator(name, 10);
+        roomGen = new RoomGenerator(name, 10);
     }
     
     public void loadGame()

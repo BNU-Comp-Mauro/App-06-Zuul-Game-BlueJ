@@ -26,7 +26,7 @@ public class RoomGenerator
     /**
      * Constructor for objects of class RoomGenerator
      */
-    public void RoomGenerator(String filename, int range)
+    public RoomGenerator(String filename, int range)
     {
         int counter = 0;
         int c = 0;

@@ -67,6 +67,12 @@ public class Game
         currentRoom = outside;  // start game outside
     }
     
+    public void gplay()
+    {
+        System.out.println("| |");
+        System.out.println("+ +-+");
+    }
+    
     /**
      *  Main play routine.  Loops until end of play.
      */

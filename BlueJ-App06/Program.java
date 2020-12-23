@@ -16,11 +16,8 @@ public class Program
      */
     public static void main()
     {
-<<<<<<< Updated upstream
         game = new Game();
         game.play();
-=======
-        menu = new Menu();
->>>>>>> Stashed changes
+        //menu = new Menu();
     }
 }
