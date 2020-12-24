@@ -18,5 +18,6 @@ public class Program
     {
         game = new Game();
         game.play();
+        //menu = new Menu();
     }
 }

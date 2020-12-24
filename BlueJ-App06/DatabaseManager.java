@@ -19,27 +19,28 @@ public class DatabaseManager
     public static Connection c = null;
     public static Statement stmt = null;
     public final static String sqlSaveData1 = "CREATE TABLE IF NOT EXISTS room" +
-        "(ID INTEGER PRIMARY KEY NOT NULL," +
-        " roomName STRING NOT NULL," + 
-        " roomType STRING NOT NULL," +
-        " items INTEGER NOT NULL," + 
-        " visitCounter INTEGER NOT NULL," + 
-        " north BOOLEAN NOT NULL," +
-        " east BOOLEAN NOT NULL," +
-        " south BOOLEAN NOT NULL," +
-        " west BOOLEAN NOT NULL," +
-        " rank INTEGER NOT NULL," +
-        " x INTEGER NOT NULL," +
-        " y INTEGER NOT NULL)";
+        "(ID INTEGER PRIMARY KEY," +
+        " roomName STRING," + 
+        " roomType STRING," +
+        " items INTEGER," + 
+        " visitCounter INTEGER," + 
+        " north BOOLEAN," +
+        " east BOOLEAN," +
+        " south BOOLEAN," +
+        " west BOOLEAN," +
+        " rank INTEGER," +
+        " x INTEGER," +
+        " y INTEGER," +
+        " found BOOLEAN)";
         
 
     public final static String sqlSaveData2 = "CREATE TABLE IF NOT EXISTS roomLog" +
-        "(ID INTEGER PRIMARY KEY NOT NULL," +
-        " roomID INTEGER NOT NULL," + 
-        " time INTEGER NOT NULL," + 
-        " visitCounter INTEGER NOT NULL," + 
-        " cameFrom String NOT NULL," +
-        " roomAge INTEGER NOT NULL)";
+        "(ID INTEGER PRIMARY KEY," +
+        " roomID INTEGER," + 
+        " time INTEGER," + 
+        " visitCounter INTEGER," + 
+        " cameFrom String," +
+        " roomAge INTEGER)";
 
     public final static String sqlSaveData3 = "CREATE TABLE IF NOT EXISTS player" +
         "(name STRING NULL," +
@@ -48,20 +49,28 @@ public class DatabaseManager
         " energy INTEGER NULL)";
 
     public final static String sqlSaveData4 = "CREATE TABLE IF NOT EXISTS playerInventory" +
-        "(ID INTEGER NOT NULL," +
-        " name STRING NOT NULL," + 
-        " type STRING NOT NULL," +
-        " rank INTEGER NOT NULL)";
+        "(ID INTEGER," +
+        " name STRING," + 
+        " type STRING," +
+        " rank INTEGER)";
 
     public final static String[] sqlSaveData = {sqlSaveData1, sqlSaveData2, sqlSaveData3, sqlSaveData4};
 
     public final static String sqlProgramFiles1 = "CREATE TABLE IF NOT EXISTS roomdata" +
-        "(ID STRING NOT NULL," +
-        " type STRING NOT NULL)";
+        "(ID STRING," +
+        " type STRING," +
+        " description STRING)";
         
     public final static String sqlProgramFiles2 = "CREATE TABLE IF NOT EXISTS itemdata" +
-        "(type STRING NOT NULL," +
-        " content STRING NOT NULL)";
+        "(ID INTEGER," +
+        " type STRING," +
+        " name STRING," +
+        " description STRING)";
+        
+    public final static String sqlProgramFiles3 = "CREATE TABLE IF NOT EXISTS hostiledata" +
+        "(ID STRING," +
+        " type STRING," +
+        " description STRING)";
 
     /**
      * Constructor for class DatabaseManager.
@@ -71,11 +80,11 @@ public class DatabaseManager
         dir = new DirectoryMaker();
     }
 
-    public static void connectDB(String folder, String database, boolean autoCommit)
+    public static void connectDB(String folder, String filename, boolean autoCommit)
     {
         try {
             Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:" + folder + "/" + database + ".zuul");
+            c = DriverManager.getConnection("jdbc:sqlite:" + folder + "/" + filename + ".zuul");
             stmt = c.createStatement();
             c.setAutoCommit(autoCommit);
         } catch ( Exception e ) {
@@ -116,10 +125,10 @@ public class DatabaseManager
         System.out.println("Table created successfully");
     }  
 
-    public static void insertDB(String folder, String filename, String table, String columns, String data)
+    public static void insertDB(String folder, String filename, String table, String columns, String data, boolean manualConnect)
     {
         try {
-            connectDB(folder, filename, false);
+                
             stmt = c.createStatement();
             String sql = "INSERT INTO " + table + " (" + columns + ") " +
                 "VALUES (" + data + ");"; 
@@ -134,11 +143,10 @@ public class DatabaseManager
         System.out.println("Records created successfully");
     }
 
-    public static void findDB(String folder, String filename, String table, String column, String dataType)
+    public static void findDB(String folder, String filename, String table, String column)
     {
         try {
             connectDB(folder, filename, false);
-            int type = dataTypeParser(dataType);
             stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery( "SELECT " + column + " FROM " + table + ";" );
             while ( rs.next() ) {
@@ -162,22 +170,63 @@ public class DatabaseManager
         System.out.println("Operation done successfully");  
     }
     
-    public static void getmaxID(String folder, String filename, String table, String column, String dataType)
+    
+    
+    /**
+     * select all rows 
+     */
+    public void selectAll(String filename){
+        String sql = "SELECT id, roomName FROM room";
+        
+        try{
+            connectDB("SaveData", filename, false);
+            stmt = c.createStatement();
+            ResultSet rs    = stmt.executeQuery(sql);
+            
+            // loop through the result set
+            while (rs.next()) {
+                System.out.println(rs.getInt("id") +  "\t" + 
+                                   rs.getString("roomName"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    
+    /**
+     * 
+     * @param capacity 
+     */
+    public static String getData(String filename, String sqlSelect, String sqlFrom, String sqlWhere)
+    {
+        String sql = "SELECT " + sqlSelect +" "
+                  + "FROM " + sqlFrom +" WHERE " + sqlWhere;
+        String data = null;
+        try{
+            connectDB("SaveData", filename, false);
+            stmt = c.createStatement();
+            ResultSet rs    = stmt.executeQuery(sql);
+            data = rs.getString(sqlSelect);
+            rs.close();
+            stmt.close();
+            c.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return data;
+    }
+    
+    public static void getmaxID(String folder, String filename, String table, String column)
     {
         try {
             connectDB(folder, filename, false);
-            int type = dataTypeParser(dataType);
             stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery( "SELECT " + column + " FROM " + table + ";" );
             while ( rs.next() ) {
-                int id = rs.getInt("id");
-                String  name = rs.getString("name");
-                String  message = rs.getString("message");
-                String date_added = rs.getString("date_added");
+                int id = rs.getInt("ID");
+                String  name = rs.getString("roomName");
                 System.out.println( "ID : " + id );
                 System.out.println( "Name : " + name );
-                System.out.println( "Message : " + message );
-                System.out.println( "Date Added : " + date_added );
                 System.out.println();
             }
             rs.close();
@@ -205,62 +254,124 @@ public class DatabaseManager
         }
     }
     
-    private static int dataTypeParser(String type)
+    public static void updateDB(String filename, String sqlSelect, String sqlFrom, String sqlWhere,String sqlNewData, boolean manualConnect)
     {
-        type.toLowerCase();
-        if(type.equals("string"))
-        {
-            return 1;
+        try {
+
+            connectDB("SaveData", filename, false);
+            stmt = c.createStatement();
+            String sql = "UPDATE " + sqlFrom +" SET " + sqlSelect +" = " + sqlNewData + " WHERE " + sqlWhere +";";
+            stmt.executeUpdate(sql);
+            c.commit();
+            stmt.close();
+            c.close();
+            System.out.println("Operation done successfully");
+        } catch ( Exception e ) {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            System.exit(0);
         }
-        else if(type.matches("int|integer"))
-        {
-            return 2;
+        System.out.println("Operation done successfully");
+    }
+    
+    public static void updateMultiDB(String filename, String sqlSet, String sqlFrom, String sqlWhere)
+    {
+        try {
+            connectDB("SaveData", filename, false);
+            stmt = c.createStatement();
+            String sql = "UPDATE " + sqlFrom +" SET " + sqlSet +" WHERE " + sqlWhere +";";
+            stmt.executeUpdate(sql);
+            c.commit();
+            stmt.close();
+            c.close();
+            System.out.println("Operation done successfully");
+        } catch ( Exception e ) {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            System.exit(0);
         }
-        else if(type.matches("boolean"))
+        System.out.println("Operation done successfully");
+    }
+    
+    public static void manual_connectProgramFilesDB(String filename, boolean autoCommit)
+    {
+        try
         {
-            return 3;
+            Class.forName("org.sqlite.JDBC");
+            c = DriverManager.getConnection("jdbc:sqlite:ProgramFiles/" + filename + ".zuul");
+            stmt = c.createStatement();
+            c.setAutoCommit(autoCommit);
+        } catch ( Exception e )
+        {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            System.exit(0);
         }
-        else
+    }
+
+    public static void manual_connectSaveDataDB(String filename, boolean autoCommit)
+    {
+        try
         {
-            return 4;
+            Class.forName("org.sqlite.JDBC");
+            c = DriverManager.getConnection("jdbc:sqlite:SaveData/" + filename + ".zuul");
+            stmt = c.createStatement();
+            c.setAutoCommit(autoCommit);
+        } catch ( Exception e )
+        {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            System.exit(0);
         }
     }
     
-    public static void updateDB()
+    public static void manual_insertDB(String table, String columns, String data)
     {
-        Connection c = null;
-        Statement stmt = null;
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:myBlog.sqlite");
-            c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
-
-            stmt = c.createStatement();
-            String sql = "UPDATE web_blog set message = 'This is updated by updateDB()' where ID=1;";
+            String sql = "INSERT INTO " + table + " (" + columns + ") " +
+                "VALUES (" + data + ");"; 
             stmt.executeUpdate(sql);
             c.commit();
-
-            ResultSet rs = stmt.executeQuery( "SELECT * FROM web_blog;" );
-            while ( rs.next() ) {
-                int id = rs.getInt("id");
-                String  name = rs.getString("name");
-                String  message = rs.getString("message");
-                String date_added = rs.getString("date_added");
-                System.out.println( "ID : " + id );
-                System.out.println( "Name : " + name );
-                System.out.println( "Message : " + message );
-                System.out.println( "Date Added : " + date_added );
-                System.out.println();
-            }
+        } catch ( Exception e ) {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            System.exit(0);
+        }
+    }
+    
+    public static void manual_updateMultiDB(String sqlSet, String sqlFrom, String sqlWhere)
+    {
+        try
+        {
+            String sql = "UPDATE " + sqlFrom +" SET " + sqlSet +" WHERE " + sqlWhere +";";
+            stmt.executeUpdate(sql);
+            c.commit();
+        } catch ( Exception e ) {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            System.exit(0);
+        }
+    }
+    
+    public static String manual_getDataDB(String sqlSelect, String sqlFrom, String sqlWhere)
+    {
+        String sql = "SELECT " + sqlSelect +" "
+                  + "FROM " + sqlFrom +" WHERE " + sqlWhere;
+        String data = null;
+        try{
+            ResultSet rs    = stmt.executeQuery(sql);
+            data = rs.getString(sqlSelect);
             rs.close();
+        } catch (SQLException e) {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            System.exit(0);
+        }
+        return data;
+    }
+    
+    public static void manual_closeDB()
+    {
+        try {
             stmt.close();
             c.close();
         } catch ( Exception e ) {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
             System.exit(0);
         }
-        System.out.println("Operation done successfully");
     }
 
     public static void deleteDB()
