@@ -221,7 +221,32 @@ public class MapGenerator
         db.manual_closeDB();
     }
     
-    
+    public void mazeGen(int range)
+    {
+        //coordsArray.removeAll(coordsArray);
+        int coordRange = (range / 2);
+        int targetY = coordRange;
+        int targetX = -coordRange;
+        int rangeCounter = 0;
+        int rangeCounter2 = 0;
+        int rangeStatus = 0;
+        while(rangeCounter < range)
+        {
+            rangeCounter2 = 0;
+            while(rangeCounter2 < range)
+            {
+                //coordsArray.add(targetX + "," + targetY);
+                targetX += +1;
+                rangeCounter2 += +1;
+            }
+           //
+            targetY = targetY - 1;
+            targetX = -coordRange;
+            rangeCounter += +1;
+        }
+        //return coordsArray;
+
+    }    
     public int checkDirection(String filename, int x , int y, String direction)
     {
         int check = 0;

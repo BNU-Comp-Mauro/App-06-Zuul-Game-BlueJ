@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
 import java.sql.*;
+import java.util.*;
 /**
  * Write a description of class s here.
  *
@@ -20,39 +21,52 @@ public class DatabaseManager
     public static Statement stmt = null;
     public final static String sqlSaveData1 = "CREATE TABLE IF NOT EXISTS room" +
         "(ID INTEGER PRIMARY KEY," +
-        " roomName STRING," + 
-        " roomType STRING," +
-        " items INTEGER," + 
+        " roomName STRING NOT NULL," + 
+        " roomType STRING NOT NULL," +
+        " items INTEGER DEFAULT 0," + 
         " visitCounter INTEGER," + 
-        " north BOOLEAN," +
-        " east BOOLEAN," +
-        " south BOOLEAN," +
-        " west BOOLEAN," +
-        " rank INTEGER," +
-        " x INTEGER," +
-        " y INTEGER," +
-        " found BOOLEAN)";
+        " north BOOLEAN DEFAULT 0," +
+        " east BOOLEAN DEFAULT 0," +
+        " south BOOLEAN DEFAULT 0," +
+        " west BOOLEAN DEFAULT 0," +
+        " rank INTEGER DEFAULT 0," +
+        " x INTEGER DEFAULT 0," +
+        " y INTEGER DEFAULT 0," +
+        " found BOOLEAN DEFAULT 0)";
         
 
-    public final static String sqlSaveData2 = "CREATE TABLE IF NOT EXISTS roomLog" +
+    public final static String sqlSaveData2 = "CREATE TABLE IF NOT EXISTS roomMaze" +
         "(ID INTEGER PRIMARY KEY," +
-        " roomID INTEGER," + 
-        " time INTEGER," + 
-        " visitCounter INTEGER," + 
-        " cameFrom String," +
-        " roomAge INTEGER)";
+        " roomID INTEGER NULL," + 
+        " xCell INTEGER NULL," + 
+        " yCell INTEGER NULL," + 
+        " places STRING NULL," + 
+        " items STRING NULL," + 
+        " visitCounter INTEGER DEFAULT 0," + 
+        " n BOOLEAN DEFAULT 0," +
+        " e BOOLEAN DEFAULT 0," +
+        " s BOOLEAN DEFAULT 0," +
+        " w BOOLEAN DEFAULT 0," +
+        " output STRING DEFAULT ' '," +
+        " FOREIGN KEY(roomID) REFERENCES room(ID))";
 
     public final static String sqlSaveData3 = "CREATE TABLE IF NOT EXISTS player" +
-        "(name STRING NULL," +
-        " hp INTEGER NULL," + 
-        " xp INTEGER NULL," + 
-        " energy INTEGER NULL)";
+        "(name STRING NOT NULL," +
+        " hp INTEGER DEFAULT 100," + 
+        " coins INTEGER DEFAULT 0," + 
+        " xp INTEGER DEFAULT 0," + 
+        " energy INTEGER DEFAULT 8," +
+        " armorSlot STRING NULL," +
+        " itemSlot1 STRING NULL," +
+        " itemSlot2 STRING NULL," +
+        " location STRING DEFAULT '0,0-0,0')";
 
     public final static String sqlSaveData4 = "CREATE TABLE IF NOT EXISTS playerInventory" +
         "(ID INTEGER," +
         " name STRING," + 
         " type STRING," +
-        " rank INTEGER)";
+        " rank INTEGER," +
+        " quantity INTEGER)";
 
     public final static String[] sqlSaveData = {sqlSaveData1, sqlSaveData2, sqlSaveData3, sqlSaveData4};
 
@@ -61,13 +75,13 @@ public class DatabaseManager
         " type STRING," +
         " description STRING)";
         
-    public final static String sqlProgramFiles2 = "CREATE TABLE IF NOT EXISTS itemdata" +
+    public final static String sqlProgramFiles2 = "CREATE TABLE IF NOT EXISTS itemData" +
         "(ID INTEGER," +
         " type STRING," +
         " name STRING," +
         " description STRING)";
         
-    public final static String sqlProgramFiles3 = "CREATE TABLE IF NOT EXISTS hostiledata" +
+    public final static String sqlProgramFiles3 = "CREATE TABLE IF NOT EXISTS enemyData" +
         "(ID STRING," +
         " type STRING," +
         " description STRING)";
@@ -313,6 +327,7 @@ public class DatabaseManager
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection("jdbc:sqlite:SaveData/" + filename + ".zuul");
             stmt = c.createStatement();
+            stmt.close();
             c.setAutoCommit(autoCommit);
         } catch ( Exception e )
         {
@@ -324,9 +339,10 @@ public class DatabaseManager
     public static void manual_insertDB(String table, String columns, String data)
     {
         try {
-            String sql = "INSERT INTO " + table + " (" + columns + ") " +
-                "VALUES (" + data + ");"; 
+            String sql = "INSERT INTO " + table + " (" + columns + ") " + "VALUES (" + data + ");"; 
+            stmt = c.createStatement();
             stmt.executeUpdate(sql);
+            stmt.close();
             c.commit();
         } catch ( Exception e ) {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
@@ -338,8 +354,11 @@ public class DatabaseManager
     {
         try
         {
+            
             String sql = "UPDATE " + sqlFrom +" SET " + sqlSet +" WHERE " + sqlWhere +";";
+            stmt = c.createStatement();
             stmt.executeUpdate(sql);
+            stmt.close();
             c.commit();
         } catch ( Exception e ) {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
@@ -347,16 +366,18 @@ public class DatabaseManager
         }
     }
     
+
+    
     public static String manual_getDataDB(String sqlSelect, String sqlFrom, String sqlWhere)
     {
-        String sql = "SELECT " + sqlSelect +" "
-                  + "FROM " + sqlFrom +" WHERE " + sqlWhere;
-        String data = null;
+        String sql = "SELECT " + sqlSelect + " " + "FROM " + sqlFrom +" WHERE " + sqlWhere;
+        String data = "";
         try{
             ResultSet rs    = stmt.executeQuery(sql);
             data = rs.getString(sqlSelect);
             rs.close();
-        } catch (SQLException e) {
+        } 
+        catch (SQLException e) {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
             System.exit(0);
         }

@@ -12,6 +12,7 @@ public class RoomGenerator
     Random rand = new Random();
     private Game game;
     private DatabaseManager db;
+    private MazeGenerator mg;
     private String roomName;
     public String position = null;
     public int x = 0;
@@ -147,13 +148,15 @@ public class RoomGenerator
                     items = rand.nextInt(6);
                 }
                 tunnelRand();
-                db.manual_insertDB("room", "roomName, roomType, items, visitCounter, north, east, south, west, rank, x, y, found", "'" + roomName +"', '" + roomType +"', " + items +", 0, " + tunnelList.get(0) +", " + tunnelList.get(1) +", " + tunnelList.get(2) +", " + tunnelList.get(3) +", " + rank +", " + x +", " + y +", 'false'");
+                db.manual_insertDB("room", "roomName, roomType, items, visitCounter, rank, x, y, found", "'" + roomName +"', '" + roomType +"', " + items +", 0, " + rank +", " + x +", " + y +", 'false'");
             }
             counter += +1;
             c += +1;
             
         }
         db.manual_closeDB();
+        mg = new MazeGenerator();
+        mg.mazeDB(filename, range, "room", 0);
     }
     
     public void tunnelRand()

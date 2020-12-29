@@ -1,88 +1,66 @@
-<<<<<<< HEAD
-=======
-import java.io.IOException;
-import java.nio.file.*;
-import java.util.*;
-import java.util.stream.Stream;
->>>>>>> 14a1e096748defdca33bedd40b74e1463be07ff2
+
 /**
- * Write a description of class Menu here.
+ * Holds Menu functions
  *
- * @author (your name)
- * @version (a version number or a date)
+ * @author Haroon Sadiq
+ * @version 0.1
  */
 public class Menu
 {
-    private Game game;
-    
-    private String folder;
-    
-    private String filename;
-    
-    private String table;
-    
-    private String columns;
-    
-    private String data;
-    
-    public String name;
-    
-    private RoomGenerator roomGen;
-    private DatabaseManager db;
     // Allows reader to be called directly against the class Menu
-    private InputReader reader;
-
-    //Sets the array for menu choice
-    private String [] menuChoices;
+    private static InputReader reader = new InputReader();
     
-    private String [] gameChoices;
-    ArrayList<String> filenameArray = new ArrayList<String>();
-
     /**
      * Scans user input and outputs programmed choices 
      */
-    public Menu()
+    public static String getMenuChoice(String [] choices)
     {
-        db = new DatabaseManager();
-        reader = new InputReader();
-    }
-
-    /**
-     * Contains a string array for the menu text
-     */
-    private void menuSetup()
-    {
-        menuChoices = new String []
-        {
-            "New Game",
-            "Load Game",
-            "Quit"  
-        };
-        gameChoices = new String []
-        {
-            "Easy",
-            "Medium",
-            "Hard"  
-        };
-    }
-
-    public void newGame()
-    {
-        name = reader.getString("Character Name:");
-        db.initialiseSaveData(name);
-        roomGen = new RoomGenerator(name, 10);
-    }
-    
-    public void loadGame()
-    {
-        name = reader.getString("Character Name:");
+        boolean finished = false;
+        String choice = null;
         
+        while(!finished)
+        {
+            printChoices(choices);
+            choice = reader.getInput().toLowerCase();
+            
+            
+            finished = checkIfValid(choices, choice);
+            
+            if(!finished)
+            {
+                System.out.println("|✘| Invalid choice");
+            }    
+        }
+        
+        return choice;
     }
-<<<<<<< HEAD
+    
+    /**
+     * Checks if inputted data matches choices array
+     */
+    private static boolean checkIfValid(String [] choices, String choice)
+    { 
+        for(String validChoice : choices)
+        {
+            validChoice = validChoice.toLowerCase();
+            if(validChoice.startsWith(choice))
+                return true;
+        }
+        return false;
+    }
+    
+    
+    /**
+     * Prints array of choices
+     */
+    private static void printChoices(String [] choices)
+    {
+        System.out.println("Enter the first word of the choice to run: \n");
+        for(String choice: choices)
+        {
+            System.out.println("   " + choice);
+        }
+        System.out.println("==============================================");
+    }
 }
-=======
 
-    
-    
-}
->>>>>>> 14a1e096748defdca33bedd40b74e1463be07ff2

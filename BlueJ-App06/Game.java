@@ -1,4 +1,4 @@
-import java.sql.*;
+import java.util.*;
 /**
  *  This class is the main class of the "World of Zuul" application. 
  *  "World of Zuul" is a very simple, text based adventure game.  Users 
@@ -24,17 +24,24 @@ public class Game
     private Parser parser;
     private Player player;
     private Room currentRoom;
-    private static DatabaseManager databaseManager;
+    private DatabaseManager db;
+    private RoomGenerator roomGen;
     private static InputReader reader = new InputReader();
 
     /**
      * Create the game and initialise its internal map.
      */
-    public Game() 
+    public Game(boolean newGame, String name, int range) 
     {
+        
         createRooms();
+        
         parser = new Parser();
-        player = new Player("");
+        player = new Player(name, newGame);
+        if(newGame)
+        {
+            roomGen = new RoomGenerator (name, range);
+        }
     }
 
     /**
@@ -67,9 +74,6 @@ public class Game
 
         currentRoom = outside;  // start game outside
     }
-<<<<<<< HEAD
-
-=======
     
     public void gplay()
     {
@@ -77,7 +81,6 @@ public class Game
         System.out.println("+ +-+");
     }
     
->>>>>>> 14a1e096748defdca33bedd40b74e1463be07ff2
     /**
      *  Main play routine.  Loops until end of play.
      */

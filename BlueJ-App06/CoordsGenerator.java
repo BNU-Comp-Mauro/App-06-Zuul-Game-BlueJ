@@ -7,7 +7,7 @@ import java.util.*;
  */
 public class CoordsGenerator
 {
-    ArrayList<String> coordsArray = new ArrayList<String>();
+    public ArrayList<String> coordsArray = new ArrayList<String>();
     
     public ArrayList<String> spiralGen(int xLocation, int yLocation, int range)
     {
@@ -53,7 +53,7 @@ public class CoordsGenerator
         return coordsArray;
     }
     
-    public ArrayList<String> listGen (int range)
+    public ArrayList<String> oldlistGen (int range)
     {
         coordsArray.removeAll(coordsArray);
         int coordRange = (range / 2);
@@ -77,6 +77,32 @@ public class CoordsGenerator
             rangeCounter += +1;
         }
         return coordsArray;
+    }
+    
+    public ArrayList<String> listGen (int range)
+    {
+        ArrayList<String> eee = new ArrayList<String>();
+        int coordRange = (range / 2);
+        int targetY = coordRange;
+        int targetX = -coordRange;
+        int rangeCounter = 0;
+        int rangeCounter2 = 0;
+        int rangeStatus = 0;
+        while(rangeCounter < range)
+        {
+            rangeCounter2 = 0;
+            while(rangeCounter2 < range)
+            {
+                eee.add(targetX + "," + targetY);
+                targetX += +1;
+                rangeCounter2 += +1;
+            }
+           //
+            targetY = targetY - 1;
+            targetX = -coordRange;
+            rangeCounter += +1;
+        }
+        return eee;
     }
     
     public ArrayList<String> borderGen(int range)
@@ -113,6 +139,7 @@ public class CoordsGenerator
                     }
                     else if(targetX == coordRange)
                     {
+                        
                         coordsArray.add(targetX + "," + targetY); // NE
                     }
                     else

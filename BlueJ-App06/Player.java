@@ -8,26 +8,38 @@ import java.util.ArrayList;
 public class Player
 {
     private Items item;
+    private DatabaseManager db;
 
-    private int health;
-    private int energy;
-    private ArrayList itemList;
-    private int attackValue;
-    private int defenseValue;
-    private String name;
-    private int score;
+    public int hp;
+    public int energy;
+    public ArrayList itemList;
+    public int attackValue;
+    public int defenseValue;
+    public String name;
+    public int score;
+    public String location;
 
-    public Player(String name)
+    public Player(String name, boolean newPlayer)
     {
-        this.item = item;
+        db.manual_connectSaveDataDB(name, false);
+        if(newPlayer)
+        {
+            db.manual_insertDB("player", "name", "'" + name + "'");
+        }
         this.name = name;
-        health = 100;
-        energy = 100;
+        hp = Integer.parseInt(db.manual_getDataDB("hp", "player", "name = '" + name + "'"));
+        energy = Integer.parseInt(db.manual_getDataDB("energy", "player", "name = '" + name + "'"));
+        location = db.manual_getDataDB("energy", "player", "name = '" + name + "'");
+        db.manual_closeDB();
         attackValue = 0;
         defenseValue = 0;
         score = 0;
-
         itemList = new ArrayList();
+    }
+    
+    public String getPlayerDB(String column)
+    {
+        return db.manual_getDataDB(column, "player", "name = '" + name + "'");
     }
 
     public void grabItem(Items item, Command command)
@@ -59,13 +71,13 @@ public class Player
         }
         else if(item == Items.POTION)
         {
-            if(health > 51 && health <= 100)
+            if(hp > 51 && hp <= 100)
             {
-                health = 100;
+                hp = 100;
             }
             else
             {
-                health += 50;
+                hp += 50;
             }
         }
     }
@@ -74,7 +86,7 @@ public class Player
     {
         System.out.println("Attack: " + attackValue);
         System.out.println("Defense: " + defenseValue);
-        System.out.println("HP: " + health);
+        System.out.println("HP: " + hp);
     }
     
     public boolean dropItem(Items item, Command command)
@@ -82,12 +94,12 @@ public class Player
         return itemList.remove(item);
     }
 
-    public int getHealth(){
-        return this.health;
+    public int gethp(){
+        return this.hp;
     }
 
-    public void changeHealth(int amount){
-        this.health = this.health + amount;
+    public void changehp(int amount){
+        this.hp = this.hp + amount;
     }
 
     public int getEnergy(){
