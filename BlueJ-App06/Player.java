@@ -69,7 +69,7 @@ public class Player
         {
             defenseValue = 100;
         }
-        else if(item == Items.POTION)
+        else if(item == Items.HEALTH_POTION)
         {
             if(hp > 51 && hp <= 100)
             {
