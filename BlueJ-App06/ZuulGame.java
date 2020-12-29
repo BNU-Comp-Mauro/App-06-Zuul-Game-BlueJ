@@ -210,6 +210,10 @@ public class ZuulGame
             db.initialiseSaveData(name);
             game = new Game(true, name,range);
         }
+        else if(choice.equals(QUIT))
+        {
+            System.exit(0);
+        }
 
     }
 
