@@ -55,7 +55,7 @@ public class Game
         {
             roomGen = new RoomGenerator (name, range);
         }
-        gplay();
+        play();
     }
     
     public void updatePlayerData()
@@ -74,11 +74,11 @@ public class Game
         playerDataInv = player.getPlayerInventory(name);
     }
 
-    
     public void updatePlayerDB(String column, String newData)
     {   
         db.manual_updateMultiDB("north = " + north + ", east = " + east + ", south = " + south + ", west = " + west, "room", "x = " + targetX + " AND y = " + targetY);
-    }
+    } 
+    
     public void updateInventoryDB()
     {   
         while(true)

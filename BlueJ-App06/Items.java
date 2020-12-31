@@ -6,10 +6,10 @@
  */
 public enum Items
 {
-    STICK("stick"), STONE("stone"), BRICK("brick"), SPATULA("spatula"),
-    BAT ("bat"), SPEAR("spear"), SWORD("sword"), TRIDENT("trident"),
-    MONEY("money"), HEALTH_POTION("health"),
-    ENERGY_POTION("energy"), SHIELD("shield"), ARMOR("armor");
+    W1("stick"), W2("stone"), W3("brick"), W4("spatula"),
+    W5("bat"), W6("spear"), W7("sword"), W8("trident"),
+    C1("money"), P1("health"),
+    P2("energy"), S1("shield"), S2("armor");
     
     private String itemString;
     
