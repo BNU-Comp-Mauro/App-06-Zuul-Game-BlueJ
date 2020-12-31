@@ -252,10 +252,6 @@ public class RoomGenerator
                 {
                     south = "0";
                 }
-                //db.updateDB(filename, "north", "room", "x = " + targetX + " AND y = " + targetY, north, true);
-                //db.updateDB(filename, "east", "room", "x = " + targetX + " AND y = " + targetY, east, true);
-                //db.updateDB(filename, "south", "room", "x = " + targetX + " AND y = " + targetY, south, true);
-                //db.updateDB(filename, "west", "room", "x = " + targetX + " AND y = " + targetY, west, true);
                 db.manual_updateMultiDB("north = " + north + ", east = " + east + ", south = " + south + ", west = " + west, "room", "x = " + targetX + " AND y = " + targetY);
                 targetX += +1;
                 rangeCounter2 += +1;

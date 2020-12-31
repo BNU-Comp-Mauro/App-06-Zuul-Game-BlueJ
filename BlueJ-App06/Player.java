@@ -18,29 +18,58 @@ public class Player
     public String name;
     public int score;
     public String location;
-
+    
+    public ArrayList<String> playerData = new ArrayList<String>();
+    
     public Player(String name, boolean newPlayer)
     {
+        playerData.removeAll(playerData);
         db.manual_connectSaveDataDB(name, false);
         if(newPlayer)
         {
             db.manual_insertDB("player", "name", "'" + name + "'");
         }
-        this.name = name;
-        hp = Integer.parseInt(db.manual_getDataDB("hp", "player", "name = '" + name + "'"));
-        energy = Integer.parseInt(db.manual_getDataDB("energy", "player", "name = '" + name + "'"));
-        location = db.manual_getDataDB("energy", "player", "name = '" + name + "'");
         db.manual_closeDB();
-        attackValue = 0;
-        defenseValue = 0;
-        score = 0;
-        itemList = new ArrayList();
     }
     
-    public String getPlayerDB(String column)
+    public ArrayList<String> getPlayerData(String name)
     {
-        return db.manual_getDataDB(column, "player", "name = '" + name + "'");
+        playerData.removeAll(playerData);
+        db.manual_connectSaveDataDB(name, false);
+        playerData.add(name); //name 0
+        playerData.add(db.manual_getDataDB("hp", "player", "name = '" + name + "'")); //hp 1
+        playerData.add(db.manual_getDataDB("coins", "player", "name = '" + name + "'")); //coins 2
+        playerData.add(db.manual_getDataDB("xp", "player", "name = '" + name + "'")); //xp 3
+        playerData.add(db.manual_getDataDB("energy", "player", "name = '" + name + "'")); //energy 4
+        playerData.add(db.manual_getDataDB("armorSlot", "player", "name = '" + name + "'")); //armorSlot 5
+        playerData.add(db.manual_getDataDB("itemSlot1", "player", "name = '" + name + "'")); //itemSlot1 6
+        playerData.add(db.manual_getDataDB("itemSlot2", "player", "name = '" + name + "'")); //itemSlot2 7
+        playerData.add(db.manual_getDataDB("location", "player", "name = '" + name + "'")); //location 8
+        db.manual_closeDB();
+        return playerData;
     }
+    
+    public ArrayList<String> getPlayerInventory(String name)
+    {
+        playerData.removeAll(playerData);
+        db.manual_connectSaveDataDB(name, false);
+        int id = 0;
+        while(true)
+        {
+            try
+            {
+                playerData.add((db.manual_getDataDB("invID", "playerInventory", "ID = '" + id + "'")) + "-" + (db.manual_getDataDB("quantity", "playerInventory", "ID = '" + id + "'")));
+            }
+            catch(Exception e)
+            {
+                break;
+            }
+            id++;
+        }
+        db.manual_closeDB();
+        return playerData;
+    }
+    
 
     public void grabItem(Items item, Command command)
     {

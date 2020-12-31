@@ -2,6 +2,7 @@
 dependency1.from=Command
 dependency1.to=CommandWord
 dependency1.type=UsesDependency
+<<<<<<< Updated upstream
 dependency10.from=Program
 dependency10.to=ZuulGame
 dependency10.type=UsesDependency
@@ -31,15 +32,54 @@ dependency18.to=CoordsGenerator
 dependency18.type=UsesDependency
 dependency19.from=Game
 dependency19.to=Items
+=======
+dependency10.from=Player
+dependency10.to=Items
+dependency10.type=UsesDependency
+dependency11.from=Player
+dependency11.to=DatabaseManager
+dependency11.type=UsesDependency
+dependency12.from=Player
+dependency12.to=Command
+dependency12.type=UsesDependency
+dependency13.from=Player
+dependency13.to=CommandWord
+dependency13.type=UsesDependency
+dependency14.from=DatabaseManager
+dependency14.to=Menu
+dependency14.type=UsesDependency
+dependency15.from=DatabaseManager
+dependency15.to=DirectoryMaker
+dependency15.type=UsesDependency
+dependency16.from=DatabaseManager
+dependency16.to=SQLconnect
+dependency16.type=UsesDependency
+dependency17.from=DatabaseManager
+dependency17.to=e
+dependency17.type=UsesDependency
+dependency18.from=RoomGenerator
+dependency18.to=Game
+dependency18.type=UsesDependency
+dependency19.from=RoomGenerator
+dependency19.to=DatabaseManager
+>>>>>>> Stashed changes
 dependency19.type=UsesDependency
 dependency2.from=CommandWords
 dependency2.to=CommandWord
 dependency2.type=UsesDependency
+<<<<<<< Updated upstream
 dependency20.from=Game
 dependency20.to=Parser
 dependency20.type=UsesDependency
 dependency21.from=Game
 dependency21.to=Player
+=======
+dependency20.from=RoomGenerator
+dependency20.to=MazeGenerator
+dependency20.type=UsesDependency
+dependency21.from=Program
+dependency21.to=ZuulGame
+>>>>>>> Stashed changes
 dependency21.type=UsesDependency
 dependency22.from=Game
 dependency22.to=Room
@@ -48,6 +88,7 @@ dependency23.from=Game
 dependency23.to=DatabaseManager
 dependency23.type=UsesDependency
 dependency24.from=Game
+<<<<<<< Updated upstream
 dependency24.to=RoomGenerator
 dependency24.type=UsesDependency
 dependency25.from=Game
@@ -64,13 +105,32 @@ dependency28.to=Game
 dependency28.type=UsesDependency
 dependency29.from=MapGenerator
 dependency29.to=DatabaseManager
+=======
+dependency24.to=Items
+dependency24.type=UsesDependency
+dependency25.from=Game
+dependency25.to=Parser
+dependency25.type=UsesDependency
+dependency26.from=Game
+dependency26.to=Player
+dependency26.type=UsesDependency
+dependency27.from=Game
+dependency27.to=Room
+dependency27.type=UsesDependency
+dependency28.from=Game
+dependency28.to=DatabaseManager
+dependency28.type=UsesDependency
+dependency29.from=Game
+dependency29.to=RoomGenerator
+>>>>>>> Stashed changes
 dependency29.type=UsesDependency
 dependency3.from=Parser
 dependency3.to=CommandWords
 dependency3.type=UsesDependency
-dependency30.from=Menu
+dependency30.from=Game
 dependency30.to=InputReader
 dependency30.type=UsesDependency
+<<<<<<< Updated upstream
 dependency31.from=ZuulGame
 dependency31.to=Menu
 dependency31.type=UsesDependency
@@ -97,16 +157,50 @@ dependency38.to=Command
 dependency38.type=UsesDependency
 dependency39.from=Player
 dependency39.to=CommandWord
+=======
+dependency31.from=Game
+dependency31.to=Command
+dependency31.type=UsesDependency
+dependency32.from=Game
+dependency32.to=CommandWord
+dependency32.type=UsesDependency
+dependency33.from=e
+dependency33.to=DatabaseManager
+dependency33.type=UsesDependency
+dependency34.from=e
+dependency34.to=MazeGenerator
+dependency34.type=UsesDependency
+dependency35.from=ZuulGame
+dependency35.to=Menu
+dependency35.type=UsesDependency
+dependency36.from=ZuulGame
+dependency36.to=Game
+dependency36.type=UsesDependency
+dependency37.from=ZuulGame
+dependency37.to=RoomGenerator
+dependency37.type=UsesDependency
+dependency38.from=ZuulGame
+dependency38.to=DatabaseManager
+dependency38.type=UsesDependency
+dependency39.from=ZuulGame
+dependency39.to=InputReader
+>>>>>>> Stashed changes
 dependency39.type=UsesDependency
 dependency4.from=Parser
 dependency4.to=Command
 dependency4.type=UsesDependency
+<<<<<<< Updated upstream
 dependency5.from=SQLconnect
 dependency5.to=DirectoryMaker
+=======
+dependency5.from=Command
+dependency5.to=CommandWord
+>>>>>>> Stashed changes
 dependency5.type=UsesDependency
 dependency6.from=Room
 dependency6.to=Items
 dependency6.type=UsesDependency
+<<<<<<< Updated upstream
 dependency7.from=RoomGenerator
 dependency7.to=Game
 dependency7.type=UsesDependency
@@ -130,6 +224,31 @@ package.editor.x=0
 package.editor.y=0
 package.frame.height=838
 package.frame.width=1550
+=======
+dependency7.from=MazeGenerator
+dependency7.to=DatabaseManager
+dependency7.type=UsesDependency
+dependency8.from=MazeGenerator
+dependency8.to=CoordsGenerator
+dependency8.type=UsesDependency
+dependency9.from=Menu
+dependency9.to=InputReader
+dependency9.type=UsesDependency
+editor.fx.0.height=920
+editor.fx.0.width=1338
+editor.fx.0.x=553
+editor.fx.0.y=206
+objectbench.height=93
+objectbench.width=870
+package.divider.horizontal=0.5998632010943913
+package.divider.vertical=0.8924731182795699
+package.editor.height=823
+package.editor.width=1368
+package.editor.x=173
+package.editor.y=32
+package.frame.height=1030
+package.frame.width=1498
+>>>>>>> Stashed changes
 package.numDependencies=39
 package.numTargets=21
 package.showExtends=true
@@ -141,10 +260,11 @@ readme.width=47
 readme.x=10
 readme.y=10
 target1.height=50
-target1.name=Player
+target1.name=ee
 target1.showInterface=false
 target1.type=ClassTarget
 target1.width=80
+<<<<<<< Updated upstream
 target1.x=630
 target1.y=250
 target10.height=50
@@ -154,45 +274,87 @@ target10.type=ClassTarget
 target10.width=80
 target10.x=820
 target10.y=100
+=======
+target1.x=70
+target1.y=10
+target10.height=50
+target10.name=CommandWords
+target10.showInterface=false
+target10.type=ClassTarget
+target10.width=130
+target10.x=1010
+target10.y=600
+>>>>>>> Stashed changes
 target11.height=50
-target11.name=InputReader
+target11.name=Parser
 target11.showInterface=false
 target11.type=ClassTarget
+<<<<<<< Updated upstream
 target11.width=100
 target11.x=440
 target11.y=280
+=======
+target11.width=80
+target11.x=880
+target11.y=650
+>>>>>>> Stashed changes
 target12.height=50
-target12.name=Game
+target12.name=InputReader
 target12.showInterface=false
 target12.type=ClassTarget
+<<<<<<< Updated upstream
 target12.width=80
 target12.x=540
 target12.y=150
+=======
+target12.width=100
+target12.x=220
+target12.y=120
+>>>>>>> Stashed changes
 target13.height=50
-target13.name=MapGenerator
+target13.name=Game
 target13.showInterface=false
 target13.type=ClassTarget
+<<<<<<< Updated upstream
 target13.width=120
 target13.x=190
 target13.y=100
+=======
+target13.width=80
+target13.x=750
+target13.y=640
+>>>>>>> Stashed changes
 target14.height=50
-target14.name=Command
+target14.name=MapGenerator
 target14.showInterface=false
 target14.type=ClassTarget
+<<<<<<< Updated upstream
 target14.width=90
 target14.x=620
 target14.y=30
+=======
+target14.width=120
+target14.x=610
+target14.y=480
+>>>>>>> Stashed changes
 target15.height=50
-target15.name=CoordsGenerator
+target15.name=Command
 target15.showInterface=false
 target15.type=ClassTarget
+<<<<<<< Updated upstream
 target15.width=130
 target15.x=70
 target15.y=160
+=======
+target15.width=90
+target15.x=1020
+target15.y=470
+>>>>>>> Stashed changes
 target16.height=50
-target16.name=SQLconnect
+target16.name=CoordsGenerator
 target16.showInterface=false
 target16.type=ClassTarget
+<<<<<<< Updated upstream
 target16.width=100
 target16.x=660
 target16.y=540
@@ -202,39 +364,73 @@ target17.type=PackageTarget
 target17.width=90
 target17.x=180
 target17.y=20
+=======
+target16.width=130
+target16.x=370
+target16.y=440
+target17.height=50
+target17.name=SQLconnect
+target17.showInterface=false
+target17.type=ClassTarget
+target17.width=100
+target17.x=360
+target17.y=160
+>>>>>>> Stashed changes
 target18.height=50
 target18.name=ZuulGame
 target18.showInterface=false
 target18.type=ClassTarget
 target18.width=90
+<<<<<<< Updated upstream
 target18.x=10
 target18.y=220
+=======
+target18.x=40
+target18.y=300
+>>>>>>> Stashed changes
 target19.height=50
 target19.name=Items
 target19.showInterface=false
 target19.type=EnumTarget
 target19.width=80
+<<<<<<< Updated upstream
 target19.x=700
 target19.y=160
+=======
+target19.x=940
+target19.y=290
+>>>>>>> Stashed changes
 target2.height=50
-target2.name=RoomGenerator
+target2.name=Player
 target2.showInterface=false
 target2.type=ClassTarget
+<<<<<<< Updated upstream
 target2.width=120
 target2.x=510
 target2.y=460
+=======
+target2.width=80
+target2.x=1120
+target2.y=690
+>>>>>>> Stashed changes
 target20.height=50
 target20.name=Menu
 target20.showInterface=false
 target20.type=ClassTarget
 target20.width=80
+<<<<<<< Updated upstream
 target20.x=830
 target20.y=400
+=======
+target20.x=110
+target20.y=200
+>>>>>>> Stashed changes
 target21.height=50
 target21.name=Room
 target21.showInterface=false
 target21.type=ClassTarget
 target21.width=80
+<<<<<<< Updated upstream
 target21.x=780
 target21.y=260
 target3.height=50
@@ -244,17 +440,35 @@ target3.type=ClassTarget
 target3.width=80
 target3.x=420
 target3.y=140
+=======
+target21.x=1130
+target21.y=120
+target3.height=50
+target3.name=RoomGenerator
+target3.showInterface=false
+target3.type=ClassTarget
+target3.width=120
+target3.x=470
+target3.y=590
+>>>>>>> Stashed changes
 target4.height=50
 target4.name=DirectoryMaker
 target4.showInterface=false
 target4.type=ClassTarget
+<<<<<<< Updated upstream
 target4.width=120
 target4.x=360
 target4.y=480
+=======
+target4.width=140
+target4.x=600
+target4.y=230
+>>>>>>> Stashed changes
 target5.height=50
-target5.name=DatabaseManager
+target5.name=Program
 target5.showInterface=false
 target5.type=ClassTarget
+<<<<<<< Updated upstream
 target5.width=140
 target5.x=410
 target5.y=560
@@ -286,3 +500,36 @@ target9.type=ClassTarget
 target9.width=130
 target9.x=950
 target9.y=40
+=======
+target5.width=80
+target5.x=10
+target5.y=70
+target6.height=50
+target6.name=DatabaseManager
+target6.showInterface=false
+target6.type=ClassTarget
+target6.width=140
+target6.x=150
+target6.y=350
+target7.height=50
+target7.name=e
+target7.showInterface=false
+target7.type=ClassTarget
+target7.width=80
+target7.x=90
+target7.y=490
+target8.height=50
+target8.name=CommandWord
+target8.showInterface=false
+target8.type=EnumTarget
+target8.width=120
+target8.x=950
+target8.y=380
+target9.height=50
+target9.name=MazeGenerator
+target9.showInterface=false
+target9.type=ClassTarget
+target9.width=120
+target9.x=270
+target9.y=540
+>>>>>>> Stashed changes

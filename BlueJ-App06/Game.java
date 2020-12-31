@@ -27,58 +27,63 @@ public class Game
     private DatabaseManager db;
     private RoomGenerator roomGen;
     private static InputReader reader = new InputReader();
-
+    public ArrayList<String> playerData = new ArrayList<String>();
+    public ArrayList<String> playerDataInv = new ArrayList<String>();
+  
+    public String name;
+    public int hp;
+    public int coins;
+    public int xp;
+    public int energy;
+    public String armorSlot;
+    public String itemSlot1;
+    public String itemSlot2;
+    public String location;
     /**
      * Create the game and initialise its internal map.
      */
     public Game(boolean newGame, String name, int range) 
     {
-        
-        createRooms();
-        
         parser = new Parser();
         player = new Player(name, newGame);
+        playerData = player.getPlayerData(name);
+        
+        this.name = name;
+        updatePlayerData();
+        System.out.println(playerData);
         if(newGame)
         {
             roomGen = new RoomGenerator (name, range);
         }
-    }
-
-    /**
-     * Create all the rooms and link their exits together.
-     */
-    private void createRooms()
-    {
-        Room outside, theater, pub, lab, office;
-
-        // create the rooms
-        outside = new Room("outside the main entrance of the university");
-        theater = new Room("in a lecture theater");
-        pub = new Room("in the campus pub");
-        lab = new Room("in a computing lab");
-        office = new Room("in the computing admin office");
-
-        // initialise room exits
-        outside.setExit("east", theater);
-        outside.setExit("south", lab);
-        outside.setExit("west", pub);
-
-        theater.setExit("west", outside);
-
-        pub.setExit("east", outside);
-
-        lab.setExit("north", outside);
-        lab.setExit("east", office);
-
-        office.setExit("west", lab);
-
-        currentRoom = outside;  // start game outside
+        gplay();
     }
     
-    public void gplay()
+    public void updatePlayerData()
     {
-        System.out.println("| |");
-        System.out.println("+ +-+");
+        playerData.removeAll(playerData);
+        playerDataInv.removeAll(playerDataInv);
+        playerData = player.getPlayerData(name);
+        hp = Integer.parseInt(playerData.get(1));
+        coins = Integer.parseInt(playerData.get(2));
+        xp = Integer.parseInt(playerData.get(3));
+        energy = Integer.parseInt(playerData.get(4));
+        armorSlot = playerData.get(5);
+        itemSlot1 = playerData.get(6);
+        itemSlot2 = playerData.get(7);
+        location = playerData.get(8);
+        playerDataInv = player.getPlayerInventory(name);
+    }
+
+    
+    public void updatePlayerDB(String column, String newData)
+    {   
+        db.manual_updateMultiDB("north = " + north + ", east = " + east + ", south = " + south + ", west = " + west, "room", "x = " + targetX + " AND y = " + targetY);
+    }
+    public void updateInventoryDB()
+    {   
+        while(true)
+        {
+        }
     }
     
     /**

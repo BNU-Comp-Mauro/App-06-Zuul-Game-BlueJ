@@ -55,36 +55,41 @@ public class DatabaseManager
         " hp INTEGER DEFAULT 100," + 
         " coins INTEGER DEFAULT 0," + 
         " xp INTEGER DEFAULT 0," + 
-        " energy INTEGER DEFAULT 8," +
+        " energy INTEGER DEFAULT 100," +
         " armorSlot STRING NULL," +
         " itemSlot1 STRING NULL," +
         " itemSlot2 STRING NULL," +
-        " location STRING DEFAULT '0,0-0,0')";
+        " location STRING DEFAULT '0,0')";
 
     public final static String sqlSaveData4 = "CREATE TABLE IF NOT EXISTS playerInventory" +
-        "(ID INTEGER," +
-        " name STRING," + 
-        " type STRING," +
-        " rank INTEGER," +
+        "(ID INTEGER PRIMARY KEY," +
+        " invID STRING," + 
         " quantity INTEGER)";
 
     public final static String[] sqlSaveData = {sqlSaveData1, sqlSaveData2, sqlSaveData3, sqlSaveData4};
 
-    public final static String sqlProgramFiles1 = "CREATE TABLE IF NOT EXISTS roomdata" +
-        "(ID STRING," +
-        " type STRING," +
-        " description STRING)";
+    public final static String sqlProgramFiles1 = "CREATE TABLE IF NOT EXISTS rankdata" +
+        "(ID INTEGER," +
+        " rank STRING," +
+        " multiplier STRING)";
         
     public final static String sqlProgramFiles2 = "CREATE TABLE IF NOT EXISTS itemData" +
-        "(ID INTEGER," +
-        " type STRING," +
+        "(ID STRING," +
         " name STRING," +
-        " description STRING)";
+        " damage INTEGER," +
+        " health INTEGER," +
+        " protection INTEGER," +
+        " energy INTEGER," +
+        " coins INTEGER)";
         
     public final static String sqlProgramFiles3 = "CREATE TABLE IF NOT EXISTS enemyData" +
         "(ID STRING," +
-        " type STRING," +
-        " description STRING)";
+        " name STRING," +
+        " damage INTEGER," +
+        " health INTEGER," +
+        " coins INTEGER)";
+        
+    public final static String[] sqlProgramData = {sqlProgramFiles1, sqlProgramFiles2, sqlProgramFiles3};
 
     /**
      * Constructor for class DatabaseManager.
@@ -127,6 +132,20 @@ public class DatabaseManager
 
     public static void initialiseProgramData()
     {
+        for(String i : sqlProgramData)
+        {
+            try {
+                connectDB("ProgramFiles", "data", true);
+                stmt.executeUpdate(i);
+                stmt.close();
+                c.close();
+            } catch ( Exception e ) {
+                System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+                System.exit(0);
+            }
+            System.out.println("Table created successfully");
+        }
+        
         try {
             connectDB("ProgramFiles", "data", true);
             stmt.executeUpdate(sqlProgramFiles1);

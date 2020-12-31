@@ -54,15 +54,25 @@ public class ZuulGame
         getMenuChoice();
     }
     
+    public void syntaxSpacer()
+    {
+        int c = 0;
+        while(c < 50)
+        {
+            System.out.println("");
+            c++;
+        }
+    }
+    
     /**
      * Interprets user input at menu to execute a given task
      */
     public void getMenuChoice()
     {
         boolean finished = false;
-        
         while(!finished)
         {
+            syntaxSpacer();
             printHeading();
             String choice = Menu.getMenuChoice(menuChoices);
             executeMenuChoice(choice);
@@ -79,9 +89,9 @@ public class ZuulGame
     public void getGameChoice()
     {
         boolean finished = false;
-        
         while(!finished)
         {
+            syntaxSpacer();
             String choice = Menu.getMenuChoice(gameChoices);
             executeGameChoice(choice);
             if(choice.equals(QUIT))
