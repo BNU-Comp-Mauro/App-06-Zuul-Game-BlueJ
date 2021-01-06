@@ -17,12 +17,19 @@ public class Player
     public int defenseValue;
     public String name;
     public int score;
+    private int money;
     public String location;
     
     public ArrayList<String> playerData = new ArrayList<String>();
     
     public Player(String name, boolean newPlayer)
     {
+        hp = 100;
+        energy = 100;
+        attackValue = 0;
+        defenseValue = 0;
+        money = 0;
+        
         playerData.removeAll(playerData);
         db.manual_connectSaveDataDB(name, false);
         if(newPlayer)
@@ -91,24 +98,71 @@ public class Player
             itemList.add(item);
         }
         
-        if(item == Items.SWORD)
+        if(item == Items.W1)
         {
-            attackValue = 100;
+            attackValue = 2;
         }
-        else if(item == Items.SHIELD)
+        else if(item == Items.W2)
         {
-            defenseValue = 100;
+            attackValue = 3;
         }
-        else if(item == Items.HEALTH_POTION)
+        else if(item == Items.W3)
         {
-            if(hp > 51 && hp <= 100)
+            attackValue = 5;
+        }
+        else if(item == Items.W4)
+        {
+            attackValue = 7;
+        }
+        else if(item == Items.W5)
+        {
+            attackValue = 11;
+        }
+        else if(item == Items.W6)
+        {
+            attackValue = 13;
+        }
+        else if(item == Items.W7)
+        {
+            attackValue = 16;
+        }
+        else if(item == Items.W8)
+        {
+            attackValue = 25;
+        }
+        else if(item == Items.C1)
+        {
+            money = 2;
+        }
+        else if(item == Items.P1)
+        {
+            if(hp > 80 && hp <= 100)
             {
                 hp = 100;
             }
             else
             {
-                hp += 50;
+                hp += 20;
             }
+        }
+        else if(item == Items.P2)
+        {
+            if(energy > 80 && hp <= 100)
+            {
+                hp = 100;
+            }
+            else
+            {
+                hp += 20;
+            }
+        }
+        else if(item == Items.S1)
+        {
+            defenseValue += 25;
+        }
+        else if(item == Items.S2)
+        {
+            defenseValue += 35;
         }
     }
 
