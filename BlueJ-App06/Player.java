@@ -7,8 +7,8 @@ import java.util.ArrayList;
  */
 public class Player
 {
-    private Items item;
-    private DatabaseManager db;
+    public Items item;
+    public DatabaseManager db;
 
     public int hp;
     public int energy;
@@ -30,6 +30,7 @@ public class Player
             db.manual_insertDB("player", "name", "'" + name + "'");
         }
         db.manual_closeDB();
+        getPlayerData(name);
     }
     
     public ArrayList<String> getPlayerData(String name)

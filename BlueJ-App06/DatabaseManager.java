@@ -35,19 +35,10 @@ public class DatabaseManager
         " found BOOLEAN DEFAULT 0)";
         
 
-    public final static String sqlSaveData2 = "CREATE TABLE IF NOT EXISTS roomMaze" +
-        "(ID INTEGER PRIMARY KEY," +
-        " roomID INTEGER NULL," + 
-        " xCell INTEGER NULL," + 
-        " yCell INTEGER NULL," + 
-        " places STRING NULL," + 
-        " items STRING NULL," + 
-        " visitCounter INTEGER DEFAULT 0," + 
-        " n BOOLEAN DEFAULT 0," +
-        " e BOOLEAN DEFAULT 0," +
-        " s BOOLEAN DEFAULT 0," +
-        " w BOOLEAN DEFAULT 0," +
-        " output STRING DEFAULT ' '," +
+    public final static String sqlSaveData2 = "CREATE TABLE IF NOT EXISTS droppedItems" +
+        "(roomID INTEGER," + 
+        " invID STRING," + 
+        " quantity INTEGER DEFAULT 1," + 
         " FOREIGN KEY(roomID) REFERENCES room(ID))";
 
     public final static String sqlSaveData3 = "CREATE TABLE IF NOT EXISTS player" +
@@ -56,24 +47,19 @@ public class DatabaseManager
         " coins INTEGER DEFAULT 0," + 
         " xp INTEGER DEFAULT 0," + 
         " energy INTEGER DEFAULT 100," +
-        " armorSlot STRING NULL," +
-        " itemSlot1 STRING NULL," +
-        " itemSlot2 STRING NULL," +
+        " armorSlot STRING DEFAULT 'n/a'," +
+        " itemSlot1 STRING DEFAULT 'n/a'," +
+        " itemSlot2 STRING DEFAULT 'n/a'," +
         " location STRING DEFAULT '0,0')";
 
     public final static String sqlSaveData4 = "CREATE TABLE IF NOT EXISTS playerInventory" +
-        "(ID INTEGER PRIMARY KEY," +
-        " invID STRING," + 
+        "(invID STRING," + 
         " quantity INTEGER)";
 
     public final static String[] sqlSaveData = {sqlSaveData1, sqlSaveData2, sqlSaveData3, sqlSaveData4};
 
-    public final static String sqlProgramFiles1 = "CREATE TABLE IF NOT EXISTS rankdata" +
-        "(ID INTEGER," +
-        " rank STRING," +
-        " multiplier STRING)";
         
-    public final static String sqlProgramFiles2 = "CREATE TABLE IF NOT EXISTS itemData" +
+    public final static String sqlProgramFiles1 = "CREATE TABLE IF NOT EXISTS itemData" +
         "(ID STRING," +
         " name STRING," +
         " damage INTEGER," +
@@ -82,14 +68,14 @@ public class DatabaseManager
         " energy INTEGER," +
         " coins INTEGER)";
         
-    public final static String sqlProgramFiles3 = "CREATE TABLE IF NOT EXISTS enemyData" +
+    public final static String sqlProgramFiles2 = "CREATE TABLE IF NOT EXISTS enemyData" +
         "(ID STRING," +
         " name STRING," +
         " damage INTEGER," +
         " health INTEGER," +
         " coins INTEGER)";
         
-    public final static String[] sqlProgramData = {sqlProgramFiles1, sqlProgramFiles2, sqlProgramFiles3};
+    public final static String[] sqlProgramData = {sqlProgramFiles1, sqlProgramFiles2};
 
     /**
      * Constructor for class DatabaseManager.
@@ -324,12 +310,12 @@ public class DatabaseManager
         System.out.println("Operation done successfully");
     }
     
-    public static void manual_connectProgramFilesDB(String filename, boolean autoCommit)
+    public static void manual_connectProgramFilesDB(boolean autoCommit)
     {
         try
         {
             Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:ProgramFiles/" + filename + ".zuul");
+            c = DriverManager.getConnection("jdbc:sqlite:ProgramFiles/data.zuul");
             stmt = c.createStatement();
             c.setAutoCommit(autoCommit);
         } catch ( Exception e )
@@ -355,15 +341,75 @@ public class DatabaseManager
         }
     }
     
+    public static ArrayList<String> manual_getAllPlayerInventory(String filename)
+    {
+        manual_connectSaveDataDB(filename, false);
+        String sql = "SELECT invID, quantity FROM playerInventory";
+        ArrayList<String> playerDataInv = new ArrayList<String>();
+        int c = 0;
+        try 
+        {
+            ResultSet rs    = stmt.executeQuery(sql);
+            while (rs.next())
+            {
+                playerDataInv.add(rs.getString("invID") + "," + rs.getInt("quantity"));
+            }
+        }
+        catch (SQLException e)
+        {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            System.exit(0);
+        }
+        while(c < 17)
+        {
+            playerDataInv.add("");
+            c++;
+        }
+        manual_closeDB();
+        return playerDataInv;
+    }
+    
+    public static ArrayList<String> manual_getAllPlayerData(String filename)
+    {
+        manual_connectSaveDataDB(filename, false);
+        String sql = "SELECT hp, coins, xp, energy, armorSlot, itemSlot1, itemSlot2, location FROM player";
+        ArrayList<String> playerDataInv = new ArrayList<String>();
+        try 
+        {
+            ResultSet rs    = stmt.executeQuery(sql);
+            while (rs.next())
+            {
+                playerDataInv.add(Integer.toString(rs.getInt("hp")));
+                playerDataInv.add(Integer.toString(rs.getInt("coins")));
+                playerDataInv.add(Integer.toString(rs.getInt("xp")));
+                playerDataInv.add(Integer.toString(rs.getInt("energy")));
+                playerDataInv.add(rs.getString("armorSlot"));
+                playerDataInv.add(rs.getString("itemSlot1"));
+                playerDataInv.add(rs.getString("itemSlot2"));
+                playerDataInv.add(rs.getString("location"));
+            }
+        }
+        catch (SQLException e)
+        {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            System.exit(0);
+        }
+        manual_closeDB();
+        return playerDataInv;
+    }
+    
     public static void manual_insertDB(String table, String columns, String data)
     {
-        try {
+        try
+        {
             String sql = "INSERT INTO " + table + " (" + columns + ") " + "VALUES (" + data + ");"; 
             stmt = c.createStatement();
             stmt.executeUpdate(sql);
             stmt.close();
             c.commit();
-        } catch ( Exception e ) {
+        }
+        catch (Exception e)
+        {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
             System.exit(0);
         }
@@ -379,24 +425,62 @@ public class DatabaseManager
             stmt.executeUpdate(sql);
             stmt.close();
             c.commit();
-        } catch ( Exception e ) {
+        }
+        catch (Exception e)
+        {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
             System.exit(0);
         }
     }
     
+    public static void manual_deleteStringRowDB(String table, String row, String value)
+    {
+        String sql = "DELETE FROM " + table + " WHERE " + row + " = " + value;
+        manual_connectSaveDataDB("new", false);
+        try (PreparedStatement pstmt = c.prepareStatement(sql))
+        {
 
+            // set the corresponding param
+            pstmt.setString(0, value);
+            // execute the delete statement
+            pstmt.executeUpdate();
+
+        }
+        catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+        }
+        manual_closeDB();
+    }
+    
+    public static void manual_deleteRowDB(String table, String column, String value)
+    {
+        String sql = "DELETE FROM " + table + " WHERE " + column + " = " + value;
+        try
+        {
+            stmt = c.createStatement();
+            stmt.executeUpdate(sql);
+            // execute the delete statement
+            c.commit();
+        }
+        catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+        }
+    }
     
     public static String manual_getDataDB(String sqlSelect, String sqlFrom, String sqlWhere)
     {
         String sql = "SELECT " + sqlSelect + " " + "FROM " + sqlFrom +" WHERE " + sqlWhere;
         String data = "";
-        try{
+        try
+        {
             ResultSet rs    = stmt.executeQuery(sql);
             data = rs.getString(sqlSelect);
             rs.close();
         } 
-        catch (SQLException e) {
+        catch (SQLException e)
+        {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
             System.exit(0);
         }
@@ -405,10 +489,13 @@ public class DatabaseManager
     
     public static void manual_closeDB()
     {
-        try {
+        try
+        {
             stmt.close();
             c.close();
-        } catch ( Exception e ) {
+        }
+        catch (Exception e)
+        {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
             System.exit(0);
         }
@@ -430,7 +517,8 @@ public class DatabaseManager
             c.commit();
 
             ResultSet rs = stmt.executeQuery( "SELECT * FROM web_blog;" );
-            while ( rs.next() ) {
+            while ( rs.next() )
+            {
                 int id = rs.getInt("id");
                 String  name = rs.getString("name");
                 String  message = rs.getString("message");
@@ -444,7 +532,9 @@ public class DatabaseManager
             rs.close();
             stmt.close();
             c.close();
-        } catch ( Exception e ) {
+        }
+        catch (Exception e)
+        {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
             System.exit(0);
         }

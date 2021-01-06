@@ -22,14 +22,14 @@ public class Game
 {
     private Items item;
     private Parser parser;
-    private Player player;
+    public Player player;
     private Room currentRoom;
     private DatabaseManager db;
     private RoomGenerator roomGen;
     private static InputReader reader = new InputReader();
     public ArrayList<String> playerData = new ArrayList<String>();
     public ArrayList<String> playerDataInv = new ArrayList<String>();
-  
+    Hashtable<Integer, String> ranking = new Hashtable<Integer, String>();
     public String name;
     public int hp;
     public int coins;
@@ -39,6 +39,13 @@ public class Game
     public String itemSlot1;
     public String itemSlot2;
     public String location;
+    
+    ArrayList<String> printInv = new ArrayList<String>();
+    
+    public ArrayList<String> idArray = new ArrayList<String>();
+    
+    public int attackRating = 0;
+    public int defenseRating = 0;
     /**
      * Create the game and initialise its internal map.
      */
@@ -47,44 +54,37 @@ public class Game
         parser = new Parser();
         player = new Player(name, newGame);
         playerData = player.getPlayerData(name);
-        
+        ranking.put(1, "Common");
+        ranking.put(2, "Uncommon");
+        ranking.put(3, "Rare");
+        ranking.put(4, "Epic");
+        ranking.put(5, "Ultra");
+        ranking.put(6, "Legendary");
         this.name = name;
-        updatePlayerData();
-        System.out.println(playerData);
         if(newGame)
         {
             roomGen = new RoomGenerator (name, range);
         }
-        gplay();
+        getPlayerData(name);
+        printInventory(name);
     }
     
-    public void updatePlayerData()
-    {
-        playerData.removeAll(playerData);
-        playerDataInv.removeAll(playerDataInv);
-        playerData = player.getPlayerData(name);
-        hp = Integer.parseInt(playerData.get(1));
-        coins = Integer.parseInt(playerData.get(2));
-        xp = Integer.parseInt(playerData.get(3));
-        energy = Integer.parseInt(playerData.get(4));
-        armorSlot = playerData.get(5);
-        itemSlot1 = playerData.get(6);
-        itemSlot2 = playerData.get(7);
-        location = playerData.get(8);
-        playerDataInv = player.getPlayerInventory(name);
-    }
 
     
-    public void updatePlayerDB(String column, String newData)
-    {   
-        db.manual_updateMultiDB("north = " + north + ", east = " + east + ", south = " + south + ", west = " + west, "room", "x = " + targetX + " AND y = " + targetY);
+    public void getPlayerData(String name)
+    {
+        db.manual_connectSaveDataDB(name, false);
+        hp = Integer.parseInt(db.manual_getDataDB("hp", "player", "name = '" + name + "'")); //hp 1
+        coins = Integer.parseInt(db.manual_getDataDB("coins", "player", "name = '" + name + "'")); //coins 2
+        xp = Integer.parseInt(db.manual_getDataDB("xp", "player", "name = '" + name + "'")); //xp 3
+        energy = Integer.parseInt(db.manual_getDataDB("energy", "player", "name = '" + name + "'")); //energy 4
+        armorSlot = db.manual_getDataDB("armorSlot", "player", "name = '" + name + "'"); //armorSlot 5
+        itemSlot1 = db.manual_getDataDB("itemSlot1", "player", "name = '" + name + "'"); //itemSlot1 6
+        itemSlot2 = db.manual_getDataDB("itemSlot2", "player", "name = '" + name + "'"); //itemSlot2 7
+        location = db.manual_getDataDB("location", "player", "name = '" + name + "'"); //location 8
+        db.manual_closeDB();
     }
-    public void updateInventoryDB()
-    {   
-        while(true)
-        {
-        }
-    }
+
     
     /**
      *  Main play routine.  Loops until end of play.
@@ -103,9 +103,9 @@ public class Game
             Command command = parser.getCommand();
             finished = processCommand(command);
         }
-
         System.out.println("Thank you for playing.  Good bye.");
     }
+    
 
     /**
      * Print out the opening message for the player.
@@ -118,6 +118,155 @@ public class Game
         System.out.println("Type '" + CommandWord.HELP + "' if you need help.");
         System.out.println();
         System.out.println(currentRoom.getLongDescription());
+    }
+    
+    public String idNameParser(String id)
+    {
+        String[] values = id.split("-");
+        String rank= "";
+        String itemName= "";
+        if(id == null || id == "")
+        {
+        }
+        else
+        {
+            rank = ranking.get(Integer.parseInt(values[0]));
+            db.manual_connectProgramFilesDB(false);
+            itemName = db.manual_getDataDB("name", "itemData", "ID = '" + values[1] + "'");
+        }
+        db.manual_closeDB();
+        return rank + " " + itemName;
+    }
+    
+    public void updateEquiptRatings(String name)
+    {
+        attackRating = 0;
+        defenseRating = 0;
+        db.manual_connectSaveDataDB(name, false);
+        idArray.removeAll(idArray);
+        idArray.add(db.manual_getDataDB("itemSlot1", "player", "name = '" + name + "'"));
+        idArray.add(db.manual_getDataDB("itemSlot2", "player", "name = '" + name + "'"));
+        idArray.add(db.manual_getDataDB("armorSlot", "player", "name = '" + name + "'"));
+        db.manual_closeDB();
+        db.manual_connectProgramFilesDB(false);
+        for(String i : idArray)
+        {
+            if(!i.equals("n/a"))
+            {
+                String[] values = i.split("-");
+                int multiplier = Integer.parseInt(values[0]);
+                String itemID = values[1];
+                attackRating += +(multiplier * Integer.parseInt(db.manual_getDataDB("damage", "itemData", "ID = '" + itemID + "'")));
+                defenseRating += +(multiplier * Integer.parseInt(db.manual_getDataDB("protection", "itemData", "ID = '" + itemID + "'")));
+            }
+        }
+        db.manual_closeDB();
+    }
+    
+    public void dataParser(ArrayList<String> data)
+    {
+        System.out.println(data);
+        hp = Integer.parseInt(data.get(0)); //hp 1
+        coins = Integer.parseInt(data.get(1)); //coins 2
+        xp = Integer.parseInt(data.get(2)); //xp 3
+        energy = Integer.parseInt(data.get(3)); //energy 4
+        armorSlot = data.get(4); //armorSlot 5
+        itemSlot1 = data.get(5); //itemSlot1 6
+        itemSlot2 = data.get(6); //itemSlot2 7
+        location = data.get(7); //location 8
+    }
+    
+    public void dataInvParser(ArrayList<String> data)
+    {
+        int c = 0;
+        String arrayVal = "";
+        printInv.removeAll(printInv);
+        while(c < 17)
+        {
+            try
+            {
+                arrayVal = data.get(c);
+                String[] values = data.get(c).split(",");
+                printInv.add(idNameParser(values[0]) + "| x" + values[1]);
+            }
+            catch(Exception e)
+            {
+                printInv.add("");
+            }
+            c++;
+        }
+        
+    }
+    
+    public void printInventory(String name)
+    {
+        dataParser(db.manual_getAllPlayerData(name));
+        System.out.println("eee");
+        
+        int c = 0;
+        printInv.removeAll(printInv);
+        printInv.addAll(db.manual_getAllPlayerInventory(name));
+        
+        System.out.println("######################################################################################");
+        System.out.println("#                                                  #                                 #");
+        System.out.println("# Inventory                                        # Stats                           #");
+        System.out.println("#                                                  #                                 #");
+        System.out.println("#  ##############################################  # ############################### #");
+        System.out.println("#  # " + spacingGen(outputName(printInv.get(0)), 42) + " #  # # Energy: " + spacingGen(Integer.toString(energy), 5) + "# HP: " + spacingGen(Integer.toString(hp), 9) + "# #");
+        System.out.println("#  # " + spacingGen(outputName(printInv.get(1)), 42) + " #  # # Armor : " + spacingGen(Integer.toString(energy), 5) + "# XP: " + spacingGen(Integer.toString(xp), 9) + "# #");
+        System.out.println("#  # " + spacingGen(outputName(printInv.get(2)), 42) + " #  # ############################### #");
+        System.out.println("#  # " + spacingGen(outputName(printInv.get(3)), 42) + " #  #                                 #");
+        System.out.println("#  # " + spacingGen(outputName(printInv.get(4)), 42) + " #  ###################################");
+        System.out.println("#  # " + spacingGen(outputName(printInv.get(5)), 42) + " #  #                                 #");
+        System.out.println("#  # " + spacingGen(outputName(printInv.get(6)), 42) + " #  #  #############################  #");
+        System.out.println("#  # " + spacingGen(outputName(printInv.get(7)), 42) + " #  #  # " + spacingGen(armorSlot, 26) + "#  #");
+        System.out.println("#  # " + spacingGen(outputName(printInv.get(8)), 42) + " #  #  #############################  #");
+        System.out.println("#  # " + spacingGen(outputName(printInv.get(9)), 42) + " #  #              Armor              #");
+        System.out.println("#  # " + spacingGen(outputName(printInv.get(10)), 42) + " #  #                                 #");
+        System.out.println("#  # " + spacingGen(outputName(printInv.get(11)), 42) + " #  #  #############################  #");
+        System.out.println("#  # " + spacingGen(outputName(printInv.get(12)), 42) + " #  #  # " + spacingGen(itemSlot1, 26) + "#  #");
+        System.out.println("#  # " + spacingGen(outputName(printInv.get(13)), 42) + " #  #  #############################  #");
+        System.out.println("#  # " + spacingGen(outputName(printInv.get(14)), 42) + " #  #             Left Arm            #");
+        System.out.println("#  # " + spacingGen(outputName(printInv.get(15)), 42) + " #  #                                 #");
+        System.out.println("#  # " + spacingGen(outputName(printInv.get(16)), 42) + " #  #  #############################  #");
+        System.out.println("#  ##############################################  #  # " + spacingGen(itemSlot2, 26) + "#  #");
+        System.out.println("#  # Coins: " + spacingGen(Integer.toString(coins), 36) + "#  #  #############################  #");
+        System.out.println("#  ##############################################  #            Right  Arm           #");
+        System.out.println("#                                                  #                                 #");
+        System.out.println("######################################################################################");
+    }
+    
+    public String outputName (String data)
+    {
+        try
+        {
+            String[] values = data.split(",");
+            return idNameParser(values[0]) + " | X" + values[1];
+        }
+        catch(ArrayIndexOutOfBoundsException exception)
+        {
+            return "";
+        }
+    }
+    
+    public String spacingGen (String word, int length)
+    {
+        String output = word;
+        int c = 0;
+        try
+        {
+            c = word.length();
+        }
+        catch(Exception e)
+        {
+            output = "";
+        }
+        while(c != length)
+        {
+            output += " ";
+            c++;
+        }
+        return output;
     }
 
     /**

@@ -5,7 +5,7 @@ import java.util.*;
  * @author Haroon Sadiq
  * @version 0.1
  */
-public class MazeGenerator
+public class CopyOfMazeGenerator
 {
     Random rand = new Random();
     public DatabaseManager db;
@@ -39,7 +39,7 @@ public class MazeGenerator
    /**
      * Constructor for objects of class CopyOfCopyOfMazeGenerator
      */
-    public ArrayList<String> MazeGenerator(int range)
+    public ArrayList<String> CopyOfMazeGenerator(int range)
     {
         ArrayList<String> potentialCoords = new ArrayList<String>();
         
@@ -67,8 +67,6 @@ public class MazeGenerator
         visitedCells = 1;
         
         String currentCell = coordsArray.get(rand.nextInt(coordsArray.size() -1));
-        System.out.println(currentCell);
-        System.out.println(coordsArray);
 
         while(visitedCells < totalCells)
         {
@@ -103,8 +101,6 @@ public class MazeGenerator
                 mazeCoords.add(targetX + "," + targetY + "," + dir);
                 mazeCoords.add(tX + "," + tY + "," + reverseDir.get(dir));
                 
-                System.out.println(targetX + "," + targetY + "," + dir);
-                System.out.println("NEXT: " + tX + "," + tY + "," + reverseDir.get(dir));
                 
                 cellStack.add(currentCell);
                 cellStack.add(tX + "," + tY);
@@ -144,7 +140,7 @@ public class MazeGenerator
     
     public void mazeDB(String filename, int range, String type, int roomID)
     {
-        MazeGenerator(range);
+        CopyOfMazeGenerator(range);
         ArrayList<String> usedCoords = new ArrayList<String>();
         
         

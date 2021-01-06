@@ -156,7 +156,6 @@ public class RoomGenerator
         }
         db.manual_closeDB();
         mg = new MazeGenerator();
-        mg.mazeDB(filename, range, "room", 0);
     }
     
     public void tunnelRand()
