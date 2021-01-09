@@ -1,3 +1,4 @@
+
 import java.util.*;
 /**
  *  This class is the main class of the "World of Zuul" application. 
@@ -24,11 +25,14 @@ public class Game
     private Parser parser;
     public Player player;
     private Room currentRoom;
+    Random rand = new Random();
     private DatabaseManager db;
     private RoomGenerator roomGen;
     private static InputReader reader = new InputReader();
     public ArrayList<String> playerData = new ArrayList<String>();
     public ArrayList<String> playerDataInv = new ArrayList<String>();
+    Hashtable<Integer, String> multiplierRanking = new Hashtable<Integer, String>();
+    
     Hashtable<Integer, String> ranking = new Hashtable<Integer, String>();
     public String name;
     public int hp;
@@ -49,17 +53,24 @@ public class Game
     /**
      * Create the game and initialise its internal map.
      */
-    public Game(boolean newGame, String name, int range) 
+    public void Game(boolean newGame, String name, int range) 
     {
         parser = new Parser();
         player = new Player(name, newGame);
         playerData = player.getPlayerData(name);
-        ranking.put(1, "Common");
-        ranking.put(2, "Uncommon");
-        ranking.put(3, "Rare");
-        ranking.put(4, "Epic");
-        ranking.put(5, "Ultra");
-        ranking.put(6, "Legendary");
+        multiplierRanking.put(1, "Common");
+        multiplierRanking.put(2, "Uncommon");
+        multiplierRanking.put(3, "Rare");
+        multiplierRanking.put(4, "Epic");
+        multiplierRanking.put(5, "Ultra");
+        multiplierRanking.put(6, "Legendary");
+        
+
+        
+        ranking.put(1, "1,2,3");
+        ranking.put(2, "2,3");
+        ranking.put(3, "2,3,4");
+        ranking.put(4, "1,2,3,4,5,6");
         this.name = name;
         if(newGame)
         {
@@ -69,6 +80,109 @@ public class Game
         printInventory(name);
     }
     
+    
+    public void randItemDropper(String name, int roomID, int rank, boolean visited, int xp)
+    {
+        String sqlData = "";
+        Hashtable<Integer, String> itemRanking = new Hashtable<Integer, String>();
+        itemRanking.put(1, "C1,W1,W2,W3");
+        itemRanking.put(2, "W4,P1,P2");
+        itemRanking.put(3, "W5,W6,A1");
+        itemRanking.put(4, "W7,A2,W8");
+        int xpInfluence = 0;
+        if(xp >= 5000)
+        {
+            xpInfluence = 5;
+        }
+        else if(xp >= 3500)
+        {
+            xpInfluence = 4;
+        }
+        else if(xp >= 2500)
+        {
+            xpInfluence = 3;
+        }
+        else if(xp >= 1500)
+        {
+            xpInfluence = 2;
+        }
+        else if(xp >= 750)
+        {
+            xpInfluence = 1;
+        }
+        
+        if(visited)
+        {
+            if(rand.nextInt(4) == 1) // 1 in 4 chance
+            {
+                sqlData = rand.nextInt(6)+1 + "-C1";
+            }
+        }
+        else
+        {
+            if(rank != 4 && (rand.nextInt(6) - xpInfluence) == 1) // 1 in 3 chance
+            {
+                rank++;
+                if(rank != 4 && (rand.nextInt(8) - xpInfluence) == 1) // 1 in 8 chance
+                {
+                    rank++;
+                    if(rank != 4 && (rand.nextInt(10) - xpInfluence) == 1) // 1 in 16 chance
+                    {
+                        rank++;
+                    }
+                }
+            }
+            if(rank == 1)
+            {
+                String[] itemID = itemRanking.get(1).split(",");
+                String itemIDResult = itemID[rand.nextInt(itemID.length)];
+                sqlData = rand.nextInt(3)+1 + "-" + itemIDResult;
+            }
+            else if(rank == 2)
+            {
+                String[] itemID = itemRanking.get(rand.nextInt(rank)+1).split(",");
+                String itemIDResult = itemID[rand.nextInt(itemID.length)];
+                sqlData = rand.nextInt(4)+1 + "-" + itemIDResult;
+            }
+            else if(rank == 3)
+            {
+                String[] itemID = itemRanking.get(rand.nextInt(rank)+1).split(",");
+                String itemIDResult = itemID[rand.nextInt(itemID.length)];
+                sqlData = rand.nextInt(5)+1 + "-" + itemIDResult;
+            }
+            else if(rank == 4)
+            {
+                String[] itemID = itemRanking.get(rand.nextInt(rank)+1).split(",");
+                String itemIDResult = itemID[rand.nextInt(itemID.length)];
+                sqlData = rand.nextInt(6)+1 + "-" + itemIDResult;
+            }
+        }
+        
+        if(!sqlData.equals(""))
+        {
+            
+            ArrayList<String> checkInv = db.manual_getDroppedItems(name);
+            db.manual_connectSaveDataDB(name, false);
+            boolean check = true;
+            for(String i : checkInv)
+            {
+                System.out.println(i);
+                String[] splitArray = i.split(",");
+                String invID = splitArray[0];
+                int quantity = Integer.parseInt(splitArray[1]);
+                if(invID == sqlData)
+                {
+                    db.manual_updateMultiDB("quantity =" + (quantity + 1), "droppedItems", "invID ='" + sqlData + "' AND roomID =" + roomID);
+                    check = false;
+                }
+            }
+            if(check)
+            {
+                db.manual_insertDB("droppedItems", "roomID, invID", roomID + ", '" + sqlData + "'");
+            }
+            db.manual_closeDB();
+        }
+    }
 
     
     public void getPlayerData(String name)
@@ -130,7 +244,7 @@ public class Game
         }
         else
         {
-            rank = ranking.get(Integer.parseInt(values[0]));
+            rank = multiplierRanking.get(Integer.parseInt(values[0]));
             db.manual_connectProgramFilesDB(false);
             itemName = db.manual_getDataDB("name", "itemData", "ID = '" + values[1] + "'");
         }
@@ -202,6 +316,12 @@ public class Game
     {
         dataParser(db.manual_getAllPlayerData(name));
         System.out.println("eee");
+        multiplierRanking.put(1, "Common");
+        multiplierRanking.put(2, "Uncommon");
+        multiplierRanking.put(3, "Rare");
+        multiplierRanking.put(4, "Epic");
+        multiplierRanking.put(5, "Ultra");
+        multiplierRanking.put(6, "Legendary");
         
         int c = 0;
         printInv.removeAll(printInv);

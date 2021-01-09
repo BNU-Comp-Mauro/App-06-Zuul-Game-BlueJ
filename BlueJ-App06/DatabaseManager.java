@@ -369,6 +369,29 @@ public class DatabaseManager
         return playerDataInv;
     }
     
+    public static ArrayList<String> manual_getDroppedItems(String filename)
+    {
+        manual_connectSaveDataDB(filename, false);
+        String sql = "SELECT invID, quantity FROM droppedItems";
+        ArrayList<String> playerDataInv = new ArrayList<String>();
+        int c = 0;
+        try 
+        {
+            ResultSet rs    = stmt.executeQuery(sql);
+            while (rs.next())
+            {
+                playerDataInv.add(rs.getString("invID") + "," + rs.getInt("quantity"));
+            }
+        }
+        catch (SQLException e)
+        {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            System.exit(0);
+        }
+        manual_closeDB();
+        return playerDataInv;
+    }
+    
     public static ArrayList<String> manual_getAllPlayerData(String filename)
     {
         manual_connectSaveDataDB(filename, false);
