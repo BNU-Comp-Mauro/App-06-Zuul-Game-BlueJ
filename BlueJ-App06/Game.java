@@ -158,7 +158,6 @@ public class Game
         
         if(!sqlData.equals(""))
         {
-            
             ArrayList<String> checkInv = db.manual_getDroppedItems(name);
             db.manual_connectSaveDataDB(name, false);
             boolean check = true;
@@ -218,6 +217,65 @@ public class Game
         System.out.println("Thank you for playing.  Good bye.");
     }
     
+<<<<<<< Updated upstream
+=======
+    
+    public void gplay()
+    {
+        dataParser(db.manual_getAllPlayerData(name));
+        Hashtable<String, String> tunnelTranslater = new Hashtable<String, String>();
+        tunnelTranslater.put("h1", "##############");
+        tunnelTranslater.put("v1", "#");
+        tunnelTranslater.put("h0", "              ");
+        tunnelTranslater.put("v0", " ");
+        String [] locationSplit = location.split(",");
+        int x = Integer.parseInt(locationSplit[0]);
+        int y = Integer.parseInt(locationSplit[1]);
+        
+        db.manual_connectSaveDataDB(name, false);
+        String north = tunnelTranslater.get("h" + checkDirection(name, x , y, "north"));
+        String east = tunnelTranslater.get("v" + checkDirection(name, x , y, "east"));
+        String south = tunnelTranslater.get("h" + checkDirection(name, x , y, "south"));
+        String west = tunnelTranslater.get("v" + checkDirection(name, x , y, "west"));
+        db.manual_closeDB();
+        
+        System.out.println("###################################################### ########################");
+        System.out.println("#                   "+ north +"                   # # Dropped Items        #");
+        System.out.println("#                                                    # #                      #");
+        System.out.println("#                                                    # #                      #");
+        System.out.println("#                                                    # #                      #");
+        System.out.println("#                                                    # #                      #");
+        System.out.println("#"+ west +"                                                  "+ east +"# #                      #");
+        System.out.println("#"+ west +"                         ~                        "+ east +"# #                      #");
+        System.out.println("#"+ west +"                         0                        "+ east +"# #                      #");
+        System.out.println("#"+ west +"                        -|-                       "+ east +"# #                      #");
+        System.out.println("#"+ west +"                       n/ /n                      "+ east +"# #                      #");
+        System.out.println("#"+ west +"                                                  "+ east +"# #                      #");
+        System.out.println("#                                                    # ########################");
+        System.out.println("#                                                    # # HP:                  #");
+        System.out.println("#                                                    # # Energy:               #");
+        System.out.println("#                                                    # #                      #");
+        System.out.println("#                  "+ south +"                  # #                      #");
+        System.out.println("###################################################### #                      #");
+        System.out.println("#                                      #             # #                      #");
+        System.out.println("###################################################### ########################");
+    }
+    
+    public int checkDirection(String filename, int x , int y, String direction)
+    {
+        int check = 0;
+        try
+        {
+            check = Integer.parseInt(db.manual_getDataDB(direction, "room", "x = " + x + " AND y = " + y));
+        }
+        catch(Exception e)
+        {
+            check = 0;
+        }
+        return check;
+    }
+    
+>>>>>>> Stashed changes
     /**
      * Print out the opening message for the player.
      */

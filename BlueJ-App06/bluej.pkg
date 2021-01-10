@@ -122,6 +122,7 @@ dependency8.type=UsesDependency
 dependency9.from=Player
 dependency9.to=DatabaseManager
 dependency9.type=UsesDependency
+<<<<<<< Updated upstream
 editor.fx.0.height=737
 editor.fx.0.width=814
 editor.fx.0.x=416
@@ -136,6 +137,22 @@ package.editor.x=0
 package.editor.y=0
 package.frame.height=838
 package.frame.width=1550
+=======
+editor.fx.0.height=1012
+editor.fx.0.width=1535
+editor.fx.0.x=64
+editor.fx.0.y=38
+objectbench.height=79
+objectbench.width=131
+package.divider.horizontal=0.5149253731343284
+package.divider.vertical=0.6401673640167364
+package.editor.height=133
+package.editor.width=161
+package.editor.x=155
+package.editor.y=163
+package.frame.height=1023
+package.frame.width=1434
+>>>>>>> Stashed changes
 package.numDependencies=41
 package.numTargets=23
 package.showExtends=true
@@ -207,8 +224,13 @@ target17.name=CoordsGenerator
 target17.showInterface=false
 target17.type=ClassTarget
 target17.width=130
+<<<<<<< Updated upstream
 target17.x=70
 target17.y=160
+=======
+target17.x=410
+target17.y=530
+>>>>>>> Stashed changes
 target18.height=50
 target18.name=SQLconnect
 target18.showInterface=false
@@ -283,15 +305,25 @@ target6.name=DatabaseManager
 target6.showInterface=false
 target6.type=ClassTarget
 target6.width=140
+<<<<<<< Updated upstream
 target6.x=410
 target6.y=560
+=======
+target6.x=150
+target6.y=360
+>>>>>>> Stashed changes
 target7.height=50
 target7.name=e
 target7.showInterface=false
 target7.type=ClassTarget
 target7.width=80
+<<<<<<< Updated upstream
 target7.x=90
 target7.y=10
+=======
+target7.x=280
+target7.y=480
+>>>>>>> Stashed changes
 target8.height=50
 target8.name=CommandWord
 target8.showInterface=false
@@ -304,5 +336,10 @@ target9.name=MazeGenerator
 target9.showInterface=false
 target9.type=ClassTarget
 target9.width=120
+<<<<<<< Updated upstream
 target9.x=70
 target9.y=100
+=======
+target9.x=370
+target9.y=410
+>>>>>>> Stashed changes
