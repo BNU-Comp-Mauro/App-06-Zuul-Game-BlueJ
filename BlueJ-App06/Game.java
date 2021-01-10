@@ -1,4 +1,3 @@
-
 import java.util.*;
 /**
  *  This class is the main class of the "World of Zuul" application. 
@@ -53,7 +52,7 @@ public class Game
     /**
      * Create the game and initialise its internal map.
      */
-    public void Game(boolean newGame, String name, int range) 
+    public Game(boolean newGame, String name, int range) 
     {
         parser = new Parser();
         player = new Player(name, newGame);
@@ -79,7 +78,6 @@ public class Game
         getPlayerData(name);
         printInventory(name);
     }
-    
     
     public void randItemDropper(String name, int roomID, int rank, boolean visited, int xp)
     {
@@ -220,7 +218,6 @@ public class Game
         System.out.println("Thank you for playing.  Good bye.");
     }
     
-
     /**
      * Print out the opening message for the player.
      */
@@ -231,7 +228,6 @@ public class Game
         System.out.println("World of Zuul is a new, incredibly boring adventure game.");
         System.out.println("Type '" + CommandWord.HELP + "' if you need help.");
         System.out.println();
-        System.out.println(currentRoom.getLongDescription());
     }
     
     public String idNameParser(String id)
@@ -421,6 +417,22 @@ public class Game
             case DROP:
             player.dropItem(item, command);
             break;
+            
+            case ATTACK:
+            player.dropItem(item, command);
+            break;
+            
+            case BLOCK:
+            player.dropItem(item, command);
+            break;
+            
+            case DRINK:
+            player.grabItem(item, command);
+            break;
+            
+            case BUY:
+            player.grabItem(item, command);
+            break;
 
             case INVENTORY:
             player.getItemList();
@@ -467,19 +479,8 @@ public class Game
         }
 
         String direction = command.getSecondWord();
-
-        // Try to leave current room.
-        Room nextRoom = currentRoom.getExit(direction);
-
-        if (nextRoom == null) {
-            System.out.println("There is no door!");
-        }
-        else {
-            currentRoom = nextRoom;
-            System.out.println(currentRoom.getLongDescription());
-        }
     }
-
+    
     /** 
      * "Quit" was entered. Check the rest of the command to see
      * whether we really quit the game.

@@ -132,7 +132,7 @@ public class Player
         }
         else if(item == Items.C1)
         {
-            money = 2;
+            money += 2;
         }
         else if(item == Items.P1)
         {
@@ -198,6 +198,10 @@ public class Player
         if(itemList.isEmpty())
         {
             System.out.println("Your inventory is empty!");
+        }
+        else
+        {
+            itemList.toString();
         }
         return this.itemList;
     }

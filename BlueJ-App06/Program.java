@@ -1,4 +1,3 @@
-
 /**
  * This class creates an instance of the Game
  * class and then calls on its run method.

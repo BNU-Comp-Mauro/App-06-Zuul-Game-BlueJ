@@ -80,6 +80,10 @@ public class ZuulGame
             {
                 System.exit(0);
             }
+            while(!finished)
+            {
+                game.play();
+            }
         }
     }
     
@@ -136,7 +140,6 @@ public class ZuulGame
      */
     private void executeMenuChoice(String choice)
     {
-        
         if(choice.equals(NEW))
         {
             name = reader.getString("Character Name:");
@@ -224,8 +227,5 @@ public class ZuulGame
         {
             System.exit(0);
         }
-
     }
-
-
 }
