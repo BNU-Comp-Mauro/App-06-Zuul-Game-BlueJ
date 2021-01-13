@@ -213,12 +213,9 @@ public class Game
         {
             Command command = parser.getCommand();
             finished = processCommand(command);
-        }
+            }
         System.out.println("Thank you for playing.  Good bye.");
     }
-    
-<<<<<<< Updated upstream
-=======
     
     public void gplay()
     {
@@ -275,7 +272,6 @@ public class Game
         return check;
     }
     
->>>>>>> Stashed changes
     /**
      * Print out the opening message for the player.
      */
@@ -528,15 +524,52 @@ public class Game
      * room, otherwise print an error message.
      */
     private void goRoom(Command command) 
-    {
+    {    
+        db.manual_connectSaveDataDB(name, false);
+        
+        dataParser(db.manual_getAllPlayerData(name));
+
+        String[] values = location.split(",");
+        int x = Integer.parseInt(values[0]);
+        int y = Integer.parseInt(values[1]);
+        
         if(!command.hasSecondWord()) 
         {
             // if there is no second word, we don't know where to go...
             System.out.println("Go where?");
             return;
         }
-
+        else if(command.getSecondWord().equalsIgnoreCase("north"))
+        {
+            if(checkDirection(name, x , y, "north") == 1)
+            {
+                db.manual_updateMultiDB("y = " + (y + 1), "player", "name = " + name);
+            }
+            dataParser(db.manual_getAllPlayerData(name));
+        }
+        else if(command.getSecondWord().equalsIgnoreCase("south"))
+        {
+            if(checkDirection(name, x , y, "south") == 1)
+            {
+                db.manual_updateMultiDB("y = " + (y - 1), "player", "name = " + name);
+            }
+        }
+        else if(command.getSecondWord().equalsIgnoreCase("west"))
+        {
+            if(checkDirection(name, x , y, "west") == 1)
+            {
+                db.manual_updateMultiDB("x = " + (x - 1), "player", "name = " + name);
+            }
+        }
+        else if(command.getSecondWord().equalsIgnoreCase("east"))
+        {
+            if(checkDirection(name, x , y, "east") == 1)
+            {
+                db.manual_updateMultiDB("x = " + (x + 1), "player", "name = " + name);
+            }
+        }
         String direction = command.getSecondWord();
+        db.manual_closeDB();
     }
     
     /** 
