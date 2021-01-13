@@ -33,6 +33,7 @@ public class Game
     Hashtable<Integer, String> multiplierRanking = new Hashtable<Integer, String>();
     
     Hashtable<Integer, String> ranking = new Hashtable<Integer, String>();
+    Hashtable<Integer, Boolean> converter = new Hashtable<Integer, Boolean>();
     public String name;
     public int hp;
     public int coins;
@@ -52,7 +53,7 @@ public class Game
     /**
      * Create the game and initialise its internal map.
      */
-    public Game(boolean newGame, String name, int range) 
+    public void Game(boolean newGame, String name, int range) 
     {
         parser = new Parser();
         player = new Player(name, newGame);
@@ -217,28 +218,38 @@ public class Game
         System.out.println("Thank you for playing.  Good bye.");
     }
     
-<<<<<<< Updated upstream
-=======
-    
-    public void gplay()
+    public void gplay(String name)
     {
         dataParser(db.manual_getAllPlayerData(name));
+        updateEquiptRatings(name);
         Hashtable<String, String> tunnelTranslater = new Hashtable<String, String>();
         tunnelTranslater.put("h1", "##############");
         tunnelTranslater.put("v1", "#");
         tunnelTranslater.put("h0", "              ");
         tunnelTranslater.put("v0", " ");
+        converter.put(1, true);
+        converter.put(0, false);
         String [] locationSplit = location.split(",");
         int x = Integer.parseInt(locationSplit[0]);
         int y = Integer.parseInt(locationSplit[1]);
-        
         db.manual_connectSaveDataDB(name, false);
         String north = tunnelTranslater.get("h" + checkDirection(name, x , y, "north"));
         String east = tunnelTranslater.get("v" + checkDirection(name, x , y, "east"));
         String south = tunnelTranslater.get("h" + checkDirection(name, x , y, "south"));
         String west = tunnelTranslater.get("v" + checkDirection(name, x , y, "west"));
+        String id = db.manual_getDataDB("ID", "room", "x = " + x + " AND y =" + y);
+        String roomName = db.manual_getDataDB("roomName", "room", "ID = " + id);
+        String roomType = db.manual_getDataDB("roomType", "room", "ID = " + id);
+        int rank = Integer.parseInt(db.manual_getDataDB("rank", "room", "ID = " + id));
+        int items = Integer.parseInt(db.manual_getDataDB("items", "room", "ID = " + id));
+        boolean visited = converter.get(Integer.parseInt(db.manual_getDataDB("found", "room", "ID = " + id)));
         db.manual_closeDB();
-        
+        int c = 0;
+        while(c < items +1)
+        {
+            randItemDropper(name, Integer.parseInt(id), rank, visited, xp);
+            c++;
+        }
         System.out.println("###################################################### ########################");
         System.out.println("#                   "+ north +"                   # # Dropped Items        #");
         System.out.println("#                                                    # #                      #");
@@ -252,12 +263,12 @@ public class Game
         System.out.println("#"+ west +"                       n/ /n                      "+ east +"# #                      #");
         System.out.println("#"+ west +"                                                  "+ east +"# #                      #");
         System.out.println("#                                                    # ########################");
-        System.out.println("#                                                    # # HP:                  #");
-        System.out.println("#                                                    # # Energy:               #");
-        System.out.println("#                                                    # #                      #");
-        System.out.println("#                  "+ south +"                  # #                      #");
-        System.out.println("###################################################### #                      #");
-        System.out.println("#                                      #             # #                      #");
+        System.out.println("#                                                    # # HP: " + spacingGen(Integer.toString(hp), 17) + "#");
+        System.out.println("#                                                    # # Energy: " + spacingGen(Integer.toString(energy), 13) + "#");
+        System.out.println("#                                                    # # Coins: " + spacingGen(Integer.toString(coins), 14) + "#");
+        System.out.println("#                   "+ south +"                   # # Attack: " + spacingGen(Integer.toString(attackRating), 13) + "#");
+        System.out.println("###################################################### # Defense: " + spacingGen(Integer.toString(defenseRating), 12) + "#");
+        System.out.println("# " + spacingGen(roomName, 36) + " # " + spacingGen(roomType, 11) + " # # x:" + spacingGen(Integer.toString(x), 7) + "y:" + spacingGen(Integer.toString(y), 10) + "#");
         System.out.println("###################################################### ########################");
     }
     
@@ -275,7 +286,6 @@ public class Game
         return check;
     }
     
->>>>>>> Stashed changes
     /**
      * Print out the opening message for the player.
      */
@@ -312,20 +322,24 @@ public class Game
         defenseRating = 0;
         db.manual_connectSaveDataDB(name, false);
         idArray.removeAll(idArray);
-        idArray.add(db.manual_getDataDB("itemSlot1", "player", "name = '" + name + "'"));
-        idArray.add(db.manual_getDataDB("itemSlot2", "player", "name = '" + name + "'"));
-        idArray.add(db.manual_getDataDB("armorSlot", "player", "name = '" + name + "'"));
+        idArray.add("w-" + db.manual_getDataDB("itemSlot1", "player", "name = '" + name + "'"));
+        idArray.add("w-" + db.manual_getDataDB("itemSlot2", "player", "name = '" + name + "'"));
+        idArray.add("a-" + db.manual_getDataDB("armorSlot", "player", "name = '" + name + "'"));
         db.manual_closeDB();
         db.manual_connectProgramFilesDB(false);
         for(String i : idArray)
         {
-            if(!i.equals("n/a"))
+            if(!i.contains("n/a"))
             {
                 String[] values = i.split("-");
-                int multiplier = Integer.parseInt(values[0]);
-                String itemID = values[1];
+                int multiplier = Integer.parseInt(values[1]);
+                String itemID = values[2];
                 attackRating += +(multiplier * Integer.parseInt(db.manual_getDataDB("damage", "itemData", "ID = '" + itemID + "'")));
                 defenseRating += +(multiplier * Integer.parseInt(db.manual_getDataDB("protection", "itemData", "ID = '" + itemID + "'")));
+            }
+            else if(i.contains("w-"))
+            {
+                attackRating++;
             }
         }
         db.manual_closeDB();
