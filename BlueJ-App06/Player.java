@@ -175,6 +175,10 @@ public class Player
     
     public boolean dropItem(Items item, Command command)
     {
+        if(itemList.isEmpty())
+        {
+            System.out.println("Your inventory is empty!");
+        }
         return itemList.remove(item);
     }
 
