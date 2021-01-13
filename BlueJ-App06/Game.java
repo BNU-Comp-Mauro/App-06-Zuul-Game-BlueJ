@@ -64,7 +64,7 @@ public class Game
         multiplierRanking.put(5, "Ultra");
         multiplierRanking.put(6, "Legendary");
         
-
+        
         
         ranking.put(1, "1,2,3");
         ranking.put(2, "2,3");
@@ -194,6 +194,7 @@ public class Game
         itemSlot2 = db.manual_getDataDB("itemSlot2", "player", "name = '" + name + "'"); //itemSlot2 7
         location = db.manual_getDataDB("location", "player", "name = '" + name + "'"); //location 8
         db.manual_closeDB();
+        
     }
 
     
