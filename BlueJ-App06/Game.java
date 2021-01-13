@@ -528,10 +528,13 @@ public class Game
         db.manual_connectSaveDataDB(name, false);
         
         dataParser(db.manual_getAllPlayerData(name));
+        db.manual_closeDB();
 
         String[] values = location.split(",");
         int x = Integer.parseInt(values[0]);
         int y = Integer.parseInt(values[1]);
+        
+        db.manual_connectSaveDataDB(name, false);
         
         if(!command.hasSecondWord()) 
         {
@@ -543,29 +546,28 @@ public class Game
         {
             if(checkDirection(name, x , y, "north") == 1)
             {
-                db.manual_updateMultiDB("y = " + (y + 1), "player", "name = " + name);
+                db.manual_updateMultiDB("location = " + (Integer.toString(x)  + "," + Integer.toString(y + 1)), "player", "name = '" + name + "'");
             }
-            dataParser(db.manual_getAllPlayerData(name));
         }
         else if(command.getSecondWord().equalsIgnoreCase("south"))
         {
             if(checkDirection(name, x , y, "south") == 1)
             {
-                db.manual_updateMultiDB("y = " + (y - 1), "player", "name = " + name);
+                db.manual_updateMultiDB("location = " + (x + "," + y), "player", "name = '" + name + "'");
             }
         }
         else if(command.getSecondWord().equalsIgnoreCase("west"))
         {
             if(checkDirection(name, x , y, "west") == 1)
             {
-                db.manual_updateMultiDB("x = " + (x - 1), "player", "name = " + name);
+                db.manual_updateMultiDB("location = " + (x - 1) + "," + y, "player", "name = '" + name + "'");
             }
         }
         else if(command.getSecondWord().equalsIgnoreCase("east"))
         {
             if(checkDirection(name, x , y, "east") == 1)
             {
-                db.manual_updateMultiDB("x = " + (x + 1), "player", "name = " + name);
+                db.manual_updateMultiDB("location = " + (x + 1) + "," + y, "player", "name = '" + name + "'");
             }
         }
         String direction = command.getSecondWord();
