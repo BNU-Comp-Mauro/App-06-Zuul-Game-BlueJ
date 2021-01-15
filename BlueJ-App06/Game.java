@@ -79,6 +79,10 @@ public class Game
         printInventory(name);
     }
     
+    /**
+     * Drops random items in the rooms according to their rank 
+     * and room placement.
+     */
     public void randItemDropper(String name, int roomID, int rank, boolean visited, int xp)
     {
         String sqlData = "";
@@ -181,7 +185,9 @@ public class Game
         }
     }
 
-    
+    /**
+     * Gets all the player data like hp, name, energy, items etc.
+     */
     public void getPlayerData(String name)
     {
         db.manual_connectSaveDataDB(name, false);
@@ -194,10 +200,8 @@ public class Game
         itemSlot2 = db.manual_getDataDB("itemSlot2", "player", "name = '" + name + "'"); //itemSlot2 7
         location = db.manual_getDataDB("location", "player", "name = '" + name + "'"); //location 8
         db.manual_closeDB();
-        
     }
 
-    
     /**
      *  Main play routine.  Loops until end of play.
      */
@@ -210,14 +214,17 @@ public class Game
 
         boolean finished = false;
 
-        while (! finished) 
+        while (!finished) 
         {
             Command command = parser.getCommand();
             finished = processCommand(command);
-            }
+        }
         System.out.println("Thank you for playing.  Good bye.");
     }
     
+    /**
+     * Play method, with GUI. 
+     */
     public void gplay()
     {
         dataParser(db.manual_getAllPlayerData(name));
@@ -259,6 +266,9 @@ public class Game
         System.out.println("###################################################### ########################");
     }
     
+    /**
+     * Checks which directions are available in a certain room.
+     */
     public int checkDirection(String filename, int x , int y, String direction)
     {
         int check = 0;
@@ -486,7 +496,7 @@ public class Game
             break;
             
             case BUY:
-            player.grabItem(item, command);
+            player.buyItem(item, command);
             break;
 
             case INVENTORY:

@@ -22,6 +22,9 @@ public class Player
     
     public ArrayList<String> playerData = new ArrayList<String>();
     
+    /**
+     * Constructor for class Player.
+     */
     public Player(String name, boolean newPlayer)
     {
         hp = 100;
@@ -40,6 +43,9 @@ public class Player
         getPlayerData(name);
     }
     
+    /**
+     * Get method for players' data.
+     */
     public ArrayList<String> getPlayerData(String name)
     {
         playerData.removeAll(playerData);
@@ -57,6 +63,9 @@ public class Player
         return playerData;
     }
     
+    /**
+     * Get method for players' inventory.
+     */
     public ArrayList<String> getPlayerInventory(String name)
     {
         playerData.removeAll(playerData);
@@ -78,18 +87,20 @@ public class Player
         return playerData;
     }
     
-
+    /**
+     * Pick up any item that is on a room's floor.
+     */
     public void grabItem(Items item, Command command)
     {
         CommandWord commandWord = command.getCommandWord();
 
-        if(!command.hasSecondWord()) 
+        if(command.equals(CommandWord.GRAB) && !command.hasSecondWord()) 
         {
             System.out.println("Grab what?");
             return;
         }
 
-        if(item == null) 
+        if(command.equals(CommandWord.GRAB) && item == null) 
         {
             System.out.println("That item isn't in this room!");
         }
@@ -166,20 +177,41 @@ public class Player
         }
     }
 
+    /**
+     * Buy items from the village stores.
+     */
+    public void buyItem(Items item, Command command)
+    {
+        CommandWord commandWord = command.getCommandWord();
+        
+        if(command.equals(CommandWord.BUY))
+        {
+            System.out.println("Hello World");
+        }
+    }
+    
     public void printStats()
     {
         System.out.println("Attack: " + attackValue);
         System.out.println("Defense: " + defenseValue);
         System.out.println("HP: " + hp);
+        System.out.println("Energy: " + energy);
     }
     
+    /**
+     * Drops any items currently in a player's inventory.
+     */
     public boolean dropItem(Items item, Command command)
     {
         if(itemList.isEmpty())
         {
             System.out.println("Your inventory is empty!");
         }
-        return itemList.remove(item);
+        else
+        {
+            itemList.remove(item);
+        }
+        return true;
     }
 
     public int gethp(){

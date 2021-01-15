@@ -189,10 +189,8 @@ public class DatabaseManager
         System.out.println("Operation done successfully");  
     }
     
-    
-    
     /**
-     * select all rows 
+     * Selects all rows 
      */
     public void selectAll(String filename){
         String sql = "SELECT id, roomName FROM room";
@@ -213,8 +211,7 @@ public class DatabaseManager
     }
     
     /**
-     * 
-     * @param capacity 
+     * Get method for the game's data.
      */
     public static String getData(String filename, String sqlSelect, String sqlFrom, String sqlWhere)
     {

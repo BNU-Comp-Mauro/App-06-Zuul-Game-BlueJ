@@ -157,6 +157,9 @@ public class RoomGenerator
         mg = new MazeGenerator();
     }
     
+    /**
+     * Tunnel randomizer.
+     */
     public void tunnelRand()
     {
         ArrayList<Integer> intList = new ArrayList<Integer>();
@@ -188,6 +191,9 @@ public class RoomGenerator
         System.out.println(tunnelList);
     }
     
+    /**
+     * Links tunnels together.
+     */
     public void tunnelLinker(String filename, int range)
     {
         int id = 0;
@@ -261,7 +267,6 @@ public class RoomGenerator
         db.manual_closeDB();
     }
     
-    
     public void test2(int xLocation, int yLocation, int range)
     {
         xyRoom.removeAll(xyRoom);
@@ -306,6 +311,9 @@ public class RoomGenerator
         System.out.println(xyRoom);
     }
     
+    /**
+     * Generate the room names randomly.
+     */
     private String wordGen()
     {
         char a = (char) (rand.nextInt(26) + 'A');
@@ -314,12 +322,18 @@ public class RoomGenerator
         return a + b + c;
     }
     
+    /**
+     * Generate the village names randomly.
+     */
     public String villageNameGen()
     {
         int size = villageEnding.length;
         return wordGen() + villageEnding[rand.nextInt(size)];
     }
     
+    /**
+     * Generate the monster names randomly.
+     */
     public String hostileNameGen()
     {
         int size = hostileEnding.length;
@@ -331,7 +345,6 @@ public class RoomGenerator
         int size = genericEnding.length;
         return wordGen() + genericEnding[rand.nextInt(size)];
     }
-    
     
     // optimise
     public void outerRangeGen(String filename, int range)
@@ -365,8 +378,6 @@ public class RoomGenerator
             }
             bx = (rand.nextInt((range*2)+1) - range);
         }
-        
-      
     }
     
     public void eee(String filename, int range)
@@ -460,6 +471,9 @@ public class RoomGenerator
         }
     }
     
+    /**
+     * Generates the game maze.
+     */
     public void mazeGen(String filename, int range)
     {
         test2(0, 0, range);
