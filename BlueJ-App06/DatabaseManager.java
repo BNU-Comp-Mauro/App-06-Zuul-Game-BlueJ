@@ -369,10 +369,10 @@ public class DatabaseManager
         return playerDataInv;
     }
     
-    public static ArrayList<String> manual_getDroppedItems(String filename)
+    public static ArrayList<String> manual_getAllDroppedItems(String filename)
     {
         manual_connectSaveDataDB(filename, false);
-        String sql = "SELECT invID, quantity FROM droppedItems";
+        String sql = "SELECT invID, quantity FROM playerInventory";
         ArrayList<String> playerDataInv = new ArrayList<String>();
         int c = 0;
         try 
@@ -388,9 +388,15 @@ public class DatabaseManager
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
             System.exit(0);
         }
+        while(c < 17)
+        {
+            playerDataInv.add("");
+            c++;
+        }
         manual_closeDB();
         return playerDataInv;
     }
+    
     
     public static ArrayList<String> manual_getAllPlayerData(String filename)
     {

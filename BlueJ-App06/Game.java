@@ -31,7 +31,7 @@ public class Game
     public ArrayList<String> playerData = new ArrayList<String>();
     public ArrayList<String> playerDataInv = new ArrayList<String>();
     Hashtable<Integer, String> multiplierRanking = new Hashtable<Integer, String>();
-    
+    Hashtable<String, Boolean> converter = new Hashtable<String, Boolean>();
     Hashtable<Integer, String> ranking = new Hashtable<Integer, String>();
     public String name;
     public int hp;
@@ -52,7 +52,7 @@ public class Game
     /**
      * Create the game and initialise its internal map.
      */
-    public Game(boolean newGame, String name, int range) 
+    public void Game(boolean newGame, String name, int range) 
     {
         parser = new Parser();
         player = new Player(name, newGame);
@@ -79,10 +79,11 @@ public class Game
         printInventory(name);
     }
     
-    public void randItemDropper(String name, int roomID, int rank, boolean visited, int xp)
+    public void randItemDropper(String name, int roomID, int rank, String visited, int xp)
     {
         String sqlData = "";
         Hashtable<Integer, String> itemRanking = new Hashtable<Integer, String>();
+        ArrayList<String> checkInv = db.manual_getAllDroppedItems(name);
         itemRanking.put(1, "C1,W1,W2,W3");
         itemRanking.put(2, "W4,P1,P2");
         itemRanking.put(3, "W5,W6,A1");
@@ -109,12 +110,13 @@ public class Game
             xpInfluence = 1;
         }
         
-        if(visited)
+        if(visited.equals("false"))
         {
             if(rand.nextInt(4) == 1) // 1 in 4 chance
             {
                 sqlData = rand.nextInt(6)+1 + "-C1";
             }
+            sqlData = rand.nextInt(6)+1 + "-C1";
         }
         else
         {
@@ -155,30 +157,39 @@ public class Game
                 sqlData = rand.nextInt(6)+1 + "-" + itemIDResult;
             }
         }
-        
+        db.manual_connectSaveDataDB(name, false);
         if(!sqlData.equals(""))
         {
-            ArrayList<String> checkInv = db.manual_getDroppedItems(name);
-            db.manual_connectSaveDataDB(name, false);
+            
+            
             boolean check = true;
             for(String i : checkInv)
             {
-                System.out.println(i);
                 String[] splitArray = i.split(",");
-                String invID = splitArray[0];
-                int quantity = Integer.parseInt(splitArray[1]);
-                if(invID == sqlData)
+                try
                 {
-                    db.manual_updateMultiDB("quantity =" + (quantity + 1), "droppedItems", "invID ='" + sqlData + "' AND roomID =" + roomID);
-                    check = false;
+                    String invID = splitArray[0];
+                    int quantity = Integer.parseInt(splitArray[1]);
+                    if(invID == sqlData)
+                    {
+                        db.manual_updateMultiDB("quantity =" + (quantity + 1), "droppedItems", "invID ='" + sqlData + "' AND roomID =" + roomID);
+                        check = false;
+                    }
+                }
+                catch(Exception e)
+                {
                 }
             }
             if(check)
             {
-                db.manual_insertDB("droppedItems", "roomID, invID", roomID + ", '" + sqlData + "'");
+                db.manual_insertDB("droppedItems", "roomID, invID", "'" + roomID + "', '" + sqlData + "'");
+                
             }
-            db.manual_closeDB();
+            db.manual_insertDB("droppedItems", "roomID, invID", "'" + roomID + "', '" + sqlData + "'");
+            System.out.println(roomID + sqlData);
+            
         }
+        db.manual_closeDB();
     }
 
     
@@ -218,9 +229,12 @@ public class Game
         System.out.println("Thank you for playing.  Good bye.");
     }
     
-    public void gplay()
+    public void gplay(String name)
     {
+        db.manual_connectSaveDataDB(name, false);
         dataParser(db.manual_getAllPlayerData(name));
+        db.manual_closeDB();
+        updateEquiptRatings(name);
         Hashtable<String, String> tunnelTranslater = new Hashtable<String, String>();
         tunnelTranslater.put("h1", "##############");
         tunnelTranslater.put("v1", "#");
@@ -229,33 +243,48 @@ public class Game
         String [] locationSplit = location.split(",");
         int x = Integer.parseInt(locationSplit[0]);
         int y = Integer.parseInt(locationSplit[1]);
-        
+        converter.put("true", true);
+        converter.put("false", false);
         db.manual_connectSaveDataDB(name, false);
+        String id = db.manual_getDataDB("ID", "room", "x = " + x + " AND y =" + y);
+        String roomName = db.manual_getDataDB("roomName", "room", "ID = " + id);
+        String roomType = db.manual_getDataDB("roomType", "room", "ID = " + id);
+        int rank = Integer.parseInt(db.manual_getDataDB("rank", "room", "ID = " + id));
+        int items = Integer.parseInt(db.manual_getDataDB("items", "room", "ID = " + id));
+        String visited = db.manual_getDataDB("found", "room", "ID = " + id);
         String north = tunnelTranslater.get("h" + checkDirection(name, x , y, "north"));
         String east = tunnelTranslater.get("v" + checkDirection(name, x , y, "east"));
         String south = tunnelTranslater.get("h" + checkDirection(name, x , y, "south"));
         String west = tunnelTranslater.get("v" + checkDirection(name, x , y, "west"));
         db.manual_closeDB();
-        
+        int c = 0;
+        System.out.println(items);
+        while(c < items +1)
+        {
+            randItemDropper(name, Integer.parseInt(id), rank, visited, xp);
+            c++;
+        }
+        printInv.removeAll(printInv);
+        printInv.addAll(db.manual_getAllDroppedItems(name));
         System.out.println("###################################################### ########################");
         System.out.println("#                   "+ north +"                   # # Dropped Items        #");
-        System.out.println("#                                                    # #                      #");
-        System.out.println("#                                                    # #                      #");
-        System.out.println("#                                                    # #                      #");
-        System.out.println("#                                                    # #                      #");
-        System.out.println("#"+ west +"                                                  "+ east +"# #                      #");
-        System.out.println("#"+ west +"                         ~                        "+ east +"# #                      #");
-        System.out.println("#"+ west +"                         0                        "+ east +"# #                      #");
-        System.out.println("#"+ west +"                        -|-                       "+ east +"# #                      #");
-        System.out.println("#"+ west +"                       n/ /n                      "+ east +"# #                      #");
-        System.out.println("#"+ west +"                                                  "+ east +"# #                      #");
+        System.out.println("#                                                    # # " + spacingGen(outputName(printInv.get(0)), 20) + " #");
+        System.out.println("#                                                    # # " + spacingGen(outputName(printInv.get(1)), 20) + " #");
+        System.out.println("#                                                    # # " + spacingGen(outputName(printInv.get(2)), 20) + " #");
+        System.out.println("#                                                    # # " + spacingGen(outputName(printInv.get(3)), 20) + " #");
+        System.out.println("#"+ west +"                                                  "+ east +"# # " + spacingGen(outputName(printInv.get(4)), 20) + " #");
+        System.out.println("#"+ west +"                         ~                        "+ east +"# # " + spacingGen(outputName(printInv.get(5)), 20) + " #");
+        System.out.println("#"+ west +"                         0                        "+ east +"# # " + spacingGen(outputName(printInv.get(6)), 20) + " #");
+        System.out.println("#"+ west +"                        -|-                       "+ east +"# # " + spacingGen(outputName(printInv.get(7)), 20) + " #");
+        System.out.println("#"+ west +"                       n/ /n                      "+ east +"# # " + spacingGen(outputName(printInv.get(8)), 20) + " #");
+        System.out.println("#"+ west +"                                                  "+ east +"# # " + spacingGen(outputName(printInv.get(9)), 20) + " #");
         System.out.println("#                                                    # ########################");
-        System.out.println("#                                                    # # HP:                  #");
-        System.out.println("#                                                    # # Energy:               #");
-        System.out.println("#                                                    # #                      #");
-        System.out.println("#                  "+ south +"                  # #                      #");
-        System.out.println("###################################################### #                      #");
-        System.out.println("#                                      #             # #                      #");
+        System.out.println("#                                                    # # HP: " + spacingGen(Integer.toString(hp), 17) + "#");
+        System.out.println("#                                                    # # Energy: " + spacingGen(Integer.toString(energy), 13) + "#");
+        System.out.println("#                                                    # # Coins: " + spacingGen(Integer.toString(coins), 14) + "#");
+        System.out.println("#                   "+ south +"                   # # Attack: " + spacingGen(Integer.toString(attackRating), 13) + "#");
+        System.out.println("###################################################### # Defense: " + spacingGen(Integer.toString(defenseRating), 12) + "#");
+        System.out.println("# " + spacingGen(roomName, 36) + " # " + spacingGen(roomType, 11) + " # # x:" + spacingGen(Integer.toString(x), 7) + "y:" + spacingGen(Integer.toString(y), 10) + "#");
         System.out.println("###################################################### ########################");
     }
     
@@ -309,20 +338,24 @@ public class Game
         defenseRating = 0;
         db.manual_connectSaveDataDB(name, false);
         idArray.removeAll(idArray);
-        idArray.add(db.manual_getDataDB("itemSlot1", "player", "name = '" + name + "'"));
-        idArray.add(db.manual_getDataDB("itemSlot2", "player", "name = '" + name + "'"));
-        idArray.add(db.manual_getDataDB("armorSlot", "player", "name = '" + name + "'"));
+        idArray.add("w-" + db.manual_getDataDB("itemSlot1", "player", "name = '" + name + "'"));
+        idArray.add("w-" + db.manual_getDataDB("itemSlot2", "player", "name = '" + name + "'"));
+        idArray.add("a-" + db.manual_getDataDB("armorSlot", "player", "name = '" + name + "'"));
         db.manual_closeDB();
         db.manual_connectProgramFilesDB(false);
         for(String i : idArray)
         {
-            if(!i.equals("n/a"))
+            if(!i.contains("n/a"))
             {
                 String[] values = i.split("-");
-                int multiplier = Integer.parseInt(values[0]);
-                String itemID = values[1];
+                int multiplier = Integer.parseInt(values[1]);
+                String itemID = values[2];
                 attackRating += +(multiplier * Integer.parseInt(db.manual_getDataDB("damage", "itemData", "ID = '" + itemID + "'")));
                 defenseRating += +(multiplier * Integer.parseInt(db.manual_getDataDB("protection", "itemData", "ID = '" + itemID + "'")));
+            }
+            else if(i.contains("w-"))
+            {
+                attackRating++;
             }
         }
         db.manual_closeDB();
