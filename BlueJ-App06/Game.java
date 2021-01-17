@@ -162,7 +162,7 @@ public class Game
         
         if(!sqlData.equals(""))
         {
-            ArrayList<String> checkInv = db.manual_getDroppedItems(name);
+            ArrayList<String> checkInv = db.manual_getAllDroppedItems(name);
             db.manual_connectSaveDataDB(name, false);
             boolean check = true;
             for(String i : checkInv)
@@ -373,6 +373,9 @@ public class Game
         
     }
     
+    /**
+     * Print method for the players' inventories.
+     */
     public void printInventory(String name)
     {
         dataParser(db.manual_getAllPlayerData(name));
