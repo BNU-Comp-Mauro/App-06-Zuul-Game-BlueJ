@@ -190,6 +190,9 @@ public class Player
         }
     }
     
+    /**
+     * Prints players' stats: hp, energy, attack, defense.
+     */
     public void printStats()
     {
         System.out.println("Attack: " + attackValue);
@@ -214,22 +217,37 @@ public class Player
         return true;
     }
 
+    /**
+     * Get method for the player's hp.
+     */
     public int gethp(){
         return this.hp;
     }
 
+    /**
+     * Set method for the hp stat, when picking up health potions.
+     */
     public void changehp(int amount){
         this.hp = this.hp + amount;
     }
 
+    /**
+     * Get method for energy stat.
+     */
     public int getEnergy(){
         return this.energy;
     }
 
+    /**
+     * Set method for energy, when picking up energy potions.
+     */
     public void changeEnergy(int amount){
         this.energy = this.energy + amount;
     }
 
+    /**
+     * Get method for the player's inventory.
+     */
     public ArrayList getItemList(){
         if(itemList.isEmpty())
         {
@@ -242,18 +260,30 @@ public class Player
         return this.itemList;
     }
 
+    /**
+     * Get method for attack value.
+     */
     public int getAttackValue(){
         return this.attackValue;
     }
 
+    /**
+     * Set method for attack value.
+     */
     public void setAttackValue(int attackValue){
         this.attackValue = attackValue;
     }
 
+    /**
+     * Get method for defense value.
+     */
     public int getDefenseValue(){
         return this.defenseValue;
     }
 
+    /**
+     * Set method for defense value.
+     */
     public void setDefenseValue(int defenseValue){
         this.defenseValue = defenseValue;
     }
