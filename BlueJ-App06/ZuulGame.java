@@ -113,6 +113,13 @@ public class ZuulGame
         System.out.println("==============================================");
         System.out.println("                   Zuul Game                  ");
         System.out.println("==============================================");
+        System.out.println("GAME allows individuals to indulge in the crazy");
+        System.out.println("world of monsters, where one needs to either kill");
+        System.out.println("or be killed to survive. The player must travel");
+        System.out.println("through different areas of the game battling through");
+        System.out.println("foes and enemies to reach the end, while scavenging");
+        System.out.println("for hidden treasures spread amongst the grounds of");
+        System.out.println("the game. Beware once in the land of GAME the only way out is to win.");
     }
 
     /**
